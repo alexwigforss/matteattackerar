@@ -5,7 +5,7 @@ from pygame.locals import * # QUIT event needs this
 # TODO kanske lite marginal runt knapparna
 # TODO inför poängsystem. dubbla poängen om man tar en sten i luften
 # TODO meny för att välja gamemode, level, instruktioner & highscore
-# 
+# TODO lets se if this is caught
 # 
 
 pygame.init()# initializing the constructor
