@@ -1,5 +1,6 @@
 # matteattackerar
 enkelt litet spel för att träna huvudräkning
+endast multiplikation färdisgställd.
 
 # dmn oc that name in english was token :(
 so lets call it . . .
