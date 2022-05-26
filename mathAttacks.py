@@ -1,4 +1,5 @@
 # TODO cirkeldiagram ist fär att skriva ut fraktionerna med siffror
+# TODO Test test test
 
 legend ="""
  Instruktioner
