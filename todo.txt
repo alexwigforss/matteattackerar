@@ -1,11 +1,16 @@
-StartSkärm
+Initierat Github X
+Flödesshema 			Pågår
+Pusha denna todolista till git
+Bygg om slumpfabriken till klasser
+Bygg ut slumpfabriken med klasser för Division +/- och förstagradsekvation
+
+Gui StartSkärm - In prog
+
+Ett minimalt användarsystem på lokal nivå först.
+	Typ skapa ett namn bara och håller vilka levels det namnet är på.
 
 Levels och Poäng
-Tex När man samlat hundra poäng ändras skalan
-Hastigheten ökar
+Tex När man samlat 50 poäng ändras skalan, Hastigheten ökar Etc
 
-()
-Centrera Hjälpraden Och
-
-Mervärde
+Mervärden senare kanske
 Binda ihop den med talsyntes som Säger Nummren man väljer samt hela ekvationen man skickar

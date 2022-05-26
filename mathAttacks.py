@@ -258,8 +258,9 @@ while gameOver == False:
         screen.blit(txt1 , (width-70,yy))
         #print()
 
-    # superimposing the text onto our button
+    # Skriver ut debugtexten
     screen.blit(debug_text, centerQuit)
+    # Skriver ut Nummren på nedersta listen
     screen.blit(resnum , (width/2,height-50))
     screen.blit(leftnum , (width*0.25,height-50))
     screen.blit(rightnum , (width*0.75,height-50))
