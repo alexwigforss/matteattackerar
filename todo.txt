@@ -1,6 +1,6 @@
 Initierat Github X
 Flödesshema 			Pågår
-Pusha denna todolista till git
+
 Bygg om slumpfabriken till klasser
 Bygg ut slumpfabriken med klasser för Division +/- och förstagradsekvation
 

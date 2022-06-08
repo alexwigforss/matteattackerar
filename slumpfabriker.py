@@ -3,6 +3,7 @@ from fractions import Fraction as frac
 
 run = True
 # TODO Refaktorisera denna till en eller flera klass ist börja med sub/add kanske
+# TODO bygg om till återanvändbara klasser med parametrar MIN/MAX
 
 # genererar en över alla divisioner möjliga med talen 1 till 10
 
@@ -19,7 +20,6 @@ run = True
 # print()
 # shortlist = list(dict.fromkeys(reslist))
 
-# TODO bygg om till återanvändbara klasser med parametrar MIN/MAX
 
 #   från main
 # genererar en lista över alla multiplikationer möjliga med talen x och y
@@ -33,13 +33,19 @@ for x in range(1,11):
 
 # kastar den genom dict för att få bort alla dubletter
 shortlist = list(dict.fromkeys(reslist))
-# print(shortlist,len(shortlist))
-# print()
 
-# input("Listan är skapad, tryck enter för att fortsätta")
-
-# genererar för varje varv ett slumptal och visar värdet på den korta listan via slumptal/index
+# Funktion som returnerar 
 def getRand():
+    r = shortlist[randint(0,41)]
+    return r
+
+# Funktion som returnerar 
+def getRndInt(fr,to):
+    r = shortlist[randint(0,41)]
+    return r
+
+# TODO 
+def getRndFrac(fr,to):
     r = shortlist[randint(0,41)]
     return r
 
