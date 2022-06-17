@@ -20,7 +20,7 @@ res = (720,640) # Fönstrets storlek
 screen = pygame.display.set_mode(res)# Öppnar Ett Fönster
 
 nrOfBlocksDroped = 0
-DropRate = 10000
+DropRate = 8000
 pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
 
 # Färger  
@@ -49,23 +49,19 @@ resnum = smallfont.render(str(num), True, color)
 leftnum = smallfont.render(str(lnum), True, color) 
 rightnum = smallfont.render(str(rnum), True, color) 
 movetext = smallfont.render('0' , True , (0,0,0))
-
-events = pygame.event.get() # For Key Detection
+events = pygame.event.get()
 
 def lefty():
     mus = mouse[1]
     global mouseoverLeft
     mouseoverLeft = int(mus/height*10+1)
-    # print("Hello from left",int(mus/height*10+1))
 
 def righty():
     mus = mouse[1]
     global mouseoverRight
     mouseoverRight = int(mus/height*10+1)
-    # print("Hello from right",int(mus/height*10+1))
 
 def between():
-    #mus = mouse[1]
     global mouseoverLeft
     global mouseoverRight
     mouseoverLeft = 0
@@ -74,7 +70,7 @@ def between():
 def getValue():
     return int(mouse[1]/height*10+1)
 
-rectangle_list = [] # Enemy Factory 
+rectangle_list = []
 num_list = []
 
 def DropBlock():
@@ -147,11 +143,13 @@ while gameOver == False:
             exit()
         if ev.type == pygame.USEREVENT:# Time to drop new block
             pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
-            nrOfBlocksDroped =+ 1
+            nrOfBlocksDroped += 1
+            if DropRate > 3000 and nrOfBlocksDroped % 5 == 0:
+                DropRate -= 500
             DropBlock()
+
         # Then we Check if a Key is Pressed
         if ev.type == pygame.KEYDOWN:
-
             if ev.key == pygame.K_SPACE:
                 if (target >= 0 and target < len(rectangle_list)):
                     print("space",target)
@@ -299,7 +297,7 @@ while gameOver == False:
         # print("Inget Hittat")
 
     pygame.display.update()     # next frame
-    debug_text = smallfont.render('quit' , True , color)
+    debug_text = smallfont.render(str(nrOfBlocksDroped)+' quit '+str(DropRate)  , True , color)
     #debug_text = smallfont.render(str(helpers.faktorer(num_list[0]) if len(num_list)>0 else ""), True , color)
     #debug_text = smallfont.render(str(target)+' quit '+str(num) , True , color)
     #print(lp,rp)
