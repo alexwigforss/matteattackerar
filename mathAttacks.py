@@ -19,31 +19,29 @@ pygame.init()# initializing the constructor
 res = (720,640) # Fönstrets storlek
 screen = pygame.display.set_mode(res)# Öppnar Ett Fönster
 
-# Timer För Hur Ofta Ett Nytt Block Introduceras
-pygame.time.set_timer(pygame.USEREVENT, 10000)
+nrOfBlocksDroped = 0
+DropRate = 10000
+pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
 
 # Färger  
 color = (255,255,255) # white color
 color_light = (170,170,170) # light shade of the button
 color_dark = (100,100,100) # dark shade of the button
 color_alpha_light = (170,170,170,80) # dark shade of the button
+
 GRAY = (155,155,155)
 RED = (170,0,0)
 MIXED = (150,0,150)
 
-# Sparar Fönstrets Dimensioner I Två Variabler
 width = screen.get_width()
 height = screen.get_height()
 
-# Variabler för utdata av användarens val
-num = lnum = rnum = 0
+num = lnum = rnum = 0   # Variabler för utdata av användarens val
 btn_h = int(height / 10)
 tgleft = tgright = -1
 gameOver = False
 lp = rp = False
-# defining a font
 smallfont = pygame.font.SysFont('Corbel',35)
-# rendering some texts written in this font
 debug_text = smallfont.render('quit' , True , color)
 centerQuit = debug_text.get_rect(center=(width/2,35))
 txt1 = smallfont.render('1' , True , color)
@@ -67,7 +65,7 @@ def righty():
     # print("Hello from right",int(mus/height*10+1))
 
 def between():
-    mus = mouse[1]
+    #mus = mouse[1]
     global mouseoverLeft
     global mouseoverRight
     mouseoverLeft = 0
@@ -79,16 +77,15 @@ def getValue():
 rectangle_list = [] # Enemy Factory 
 num_list = []
 
-def CreateEnemy():
+def DropBlock():
     for r in range(0,1):
         rect = pygame.Rect(200, -100, width-400, 60)
         rectangle_list.append(rect)
         num_list.append(slumpfabrik.getRand())
-        #print(num_list)
         if len(rectangle_list) > 10:
             global gameOver
             gameOver = True
-CreateEnemy()
+DropBlock()
 
 global target
 target = -1
@@ -114,10 +111,8 @@ while gameOver == False:
     #   ╦ ╦┌─┐┌─┐┬  ┬┌─┐┬─┐  ╔═╗┬ ┬┌─┐┌─┐┬┌─┌─┐
     #   ╠═╣│ ││ │└┐┌┘├┤ ├┬┘  ║  ├─┤├┤ │  ├┴┐└─┐
     #   ╩ ╩└─┘└─┘ └┘ └─┘┴└─  ╚═╝┴ ┴└─┘└─┘┴ ┴└─┘
-
     # stores the (x,y) coordinates into the variable as a tuple
     mouse = pygame.mouse.get_pos()
-
     # Quit Button
     if 140 <= mouse[0] <= width-140 and 60 >= mouse[1]:
         pygame.draw.rect(screen,color_light,[0+150,0,width-300,60])
@@ -151,7 +146,9 @@ while gameOver == False:
             pygame.quit()
             exit()
         if ev.type == pygame.USEREVENT:# Time to drop new block
-            CreateEnemy()
+            pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
+            nrOfBlocksDroped =+ 1
+            DropBlock()
         # Then we Check if a Key is Pressed
         if ev.type == pygame.KEYDOWN:
 
@@ -162,11 +159,11 @@ while gameOver == False:
                     num_list.pop(target)
                     target = -1
 
-            if ev.key == pygame.K_a:#Left
+            if ev.key == pygame.K_a:  #Left Key
                 pygame.draw.rect(screen,color_alpha_light,[0,0,140,height])
                 lp = True
 
-            if ev.key == pygame.K_d:#Right
+            if ev.key == pygame.K_d:  #Right Key
                 pygame.draw.rect(screen,color_alpha_light,[width-140,0,width,height])
                 rp = True
 

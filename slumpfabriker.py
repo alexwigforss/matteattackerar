@@ -5,38 +5,48 @@ run = True
 # TODO Refaktorisera denna till en eller flera klass ist börja med sub/add kanske
 # TODO bygg om till återanvändbara klasser med parametrar MIN/MAX
 
+multiList = []
+divList = []
 
-#def __init__(self):
-inList = list()
-
-reslist = []
 for x in range(1,11):
     for y in range(1,11):
-        reslist.append(x*y)
+        multiList.append(x*y)
 
 def ListOfMulti(fr,to):
-    global inList
-    reslist = []
+    # global inList
+    multiList = []
     # genererar en lista över alla multiplikationer möjliga med talen x och y
     for x in range(fr,to+1):
         for y in range(fr,to+1):
-            reslist.append(x*y)
-    noDupList = list(dict.fromkeys(reslist))
-    inList = noDupList
+            multiList.append(x*y)
+    noDupList = list(dict.fromkeys(multiList))
+    #inList = noDupList
     return noDupList
+multiList = ListOfMulti()
 
-# TODO generera en lista över alla divisioner möjliga med talen x och y
+# TODO generera en lista över alla fraktioner möjliga med talen x och y
+def ListofDivi(fr,to):
+    divlist = []
+    for x in range(fr,to+1):
+        for y in range(fr,to+1):
+            z = frac(float(x/y)).limit_denominator(10)
+            divlist.append(z)
+    divlist = list(dict.fromkeys(divlist))    # kastar den genom dict och tillbaka för att få bort alla dubletter
+    return divlist
+divList = ListofDivi()
 
-# kastar den genom dict och tillbaka för att få bort alla dubletter
+# Funktioner som returnerar tal från listorna med "lösningar"
+def getRandomMulti():
+    r = multiList[randint(0,41)]
+    return r
 
-# Funktion som returnerar tal från listan med lösningar
-def getRandFromList():
-    r = inList[randint(0,41)]
+def getRandomDiv():
+    r = divList[randint(0,41)]
     return r
 
 # TODO Bygg om så att listan kan skickas in utifrån och med dynamisk längd
-def getRandFromList(l):
-    r = inList[randint(0,41)]
+def getRandFromMulti(l):
+    r = multiList[randint(0,41)]
     return r
 
 
