@@ -5,49 +5,40 @@ run = True
 # TODO Refaktorisera denna till en eller flera klass ist börja med sub/add kanske
 # TODO bygg om till återanvändbara klasser med parametrar MIN/MAX
 
-# genererar en över alla divisioner möjliga med talen 1 till 10
 
-# reslist = []
-# for x in range(1,11):
-#     for y in range(1,11):
-#         #reslist.append(float(x/y))
-#         z = frac(float(x/y)).limit_denominator(10)
-#         reslist.append(z)
-#         print(z,"\t",end=" ")
-#     print()
-# #print(reslist,len(reslist))
-# print(len(reslist))
-# print()
-# shortlist = list(dict.fromkeys(reslist))
-
-
-#   från main
-# genererar en lista över alla multiplikationer möjliga med talen x och y
+#def __init__(self):
+inList = list()
 
 reslist = []
 for x in range(1,11):
     for y in range(1,11):
         reslist.append(x*y)
 
+def ListOfMulti(fr,to):
+    global inList
+    reslist = []
+    # genererar en lista över alla multiplikationer möjliga med talen x och y
+    for x in range(fr,to+1):
+        for y in range(fr,to+1):
+            reslist.append(x*y)
+    noDupList = list(dict.fromkeys(reslist))
+    inList = noDupList
+    return noDupList
+
 # TODO generera en lista över alla divisioner möjliga med talen x och y
 
-# kastar den genom dict för att få bort alla dubletter
-shortlist = list(dict.fromkeys(reslist))
+# kastar den genom dict och tillbaka för att få bort alla dubletter
 
-# Funktion som returnerar 
-def getRand():
-    r = shortlist[randint(0,41)]
+# Funktion som returnerar tal från listan med lösningar
+def getRandFromList():
+    r = inList[randint(0,41)]
     return r
 
-# Funktion som returnerar 
-def getRndInt(fr,to):
-    r = shortlist[randint(0,41)]
+# TODO Bygg om så att listan kan skickas in utifrån och med dynamisk längd
+def getRandFromList(l):
+    r = inList[randint(0,41)]
     return r
 
-# TODO 
-def getRndFrac(fr,to):
-    r = shortlist[randint(0,41)]
-    return r
 
 # while run:
 #     r = randint(0,41)
