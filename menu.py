@@ -22,7 +22,7 @@ height = screen.get_height()
 
 started = False
 options = [['Tester Testson','Ny Användare'],['Starta','Alternativ','Level','Instruktioner','Avsluta']]
-
+menu = 1
 # defining a font
 smallfont = pygame.font.SysFont('Corbel',35)
 # rendering some texts written in this font
@@ -30,7 +30,7 @@ text = smallfont.render('start' , True , other)
 
 texts = []
 
-for each in options[0]:
+for each in options[menu]:
     texts.append(smallfont.render(each , True , other))
 
 while started == False:
@@ -41,8 +41,8 @@ while started == False:
             exit()
     pygame.draw.rect(screen,white,[10,10,width-20,height-20])
 
-    for each in enumerate(options[0]):
-        ts = smallfont.size(options[0][each[0]])
+    for each in enumerate(options[menu]):
+        ts = smallfont.size(options[menu][each[0]])
         hw = ts[0]/2 # halva textens bredd
         hh = ts[1]/2 # halva textens höjd
         pygame.draw.rect(screen,gray,[100,100+each[0]*100,width-200,100])
