@@ -5,6 +5,17 @@ run = True
 # TODO Ekvationer
 # TODO bygg om till återanvändbara klasser med parametrar MIN/MAX
 
+class problemz:
+  def __init__(my, name, age):
+    my.name = name
+    my.age = age
+
+  def myfunc(s):
+    print("Hello my name is " + s.name)
+
+# p1 = Person("John", 36)
+# p1.myfunc()
+
 def ListOfSubAdd(fr,to):
     # global inList
     subList = []

@@ -1,6 +1,8 @@
 Initierat Github X
 Flödesshema 			Pågår
 
+https://pythonbasics.org/static-method/
+
 Bygg om slumpfabriken till klasser
 Bygg ut slumpfabriken med klasser för Division +/- och förstagradsekvation
 
