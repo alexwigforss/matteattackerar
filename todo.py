@@ -1,5 +1,8 @@
+"""
 Initierat Github X
 Flödesshema 			Pågår
+TODO	Ge fiender bredd(did) och placering
+TODO	Klassifiera fiender och skapa en lista av sådanna
 
 https://pythonbasics.org/static-method/
 
@@ -16,3 +19,4 @@ Tex När man samlat 50 poäng ändras skalan, Hastigheten ökar Etc
 
 Mervärden senare kanske
 Binda ihop den med talsyntes som Säger Nummren man väljer samt hela ekvationen man skickar
+"""
