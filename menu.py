@@ -15,14 +15,17 @@ screen = pygame.display.set_mode(res) # Öppnar Ett Fönster
 white = (255,255,255) # White color
 other = (0,0,255) # Blue
 gray = (150,150,150)
+options = [['Starta','Spelläge','Level','Instruktioner','Avsluta'],['Tester Testson','Ny Användare']]
+menu = 0
 
 # Sparar Fönstrets Dimensioner I Två Variabler
 width = screen.get_width()
 height = screen.get_height()
-
+xmargin = width/3-(width/3/3)
+ymargin = xmargin/2
+y_size = height-ymargin*2
+h_unit = y_size/len(options[menu])
 started = False
-options = [['Tester Testson','Ny Användare'],['Starta','Alternativ','Level','Instruktioner','Avsluta']]
-menu = 1
 # defining a font
 smallfont = pygame.font.SysFont('Corbel',35)
 # rendering some texts written in this font
@@ -45,8 +48,8 @@ while started == False:
         ts = smallfont.size(options[menu][each[0]])
         hw = ts[0]/2 # halva textens bredd
         hh = ts[1]/2 # halva textens höjd
-        pygame.draw.rect(screen,gray,[100,100+each[0]*100,width-200,100])
-        screen.blit(texts[each[0]],(width/2-hw,100+ts[1]+each[0]*100))
+        pygame.draw.rect(screen,gray,[xmargin,ymargin+each[0]*h_unit+2,width-xmargin*2,h_unit-2])
+        screen.blit(texts[each[0]],(width/2-hw,ymargin+ts[1]+each[0]*h_unit))
 
     pygame.display.update()     # next frame
 
