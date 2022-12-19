@@ -1,3 +1,6 @@
+# DID ge rätt sorlek till rätt tal
+# DID få dem att släppas i x-led där det finns plats
+# TODO Få dem att falla till botten om det finns plats
 # TODO cirkeldiagram ist fär att skriva ut fraktionerna med siffror
 # TODO Test test test
 
@@ -10,6 +13,7 @@ legend ="""
 import pygame
 from pygame.locals import * # QUIT event needs this
 import slumpfabrik
+import random
 import helpers
 
 # init window
@@ -20,7 +24,7 @@ res = (720,640) # Fönstrets storlek
 screen = pygame.display.set_mode(res)# Öppnar Ett Fönster
 
 nrOfBlocksDroped = 0
-DropRate = 8000
+DropRate = 2000
 pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
 
 # Färger  
@@ -36,11 +40,26 @@ MIXED = (150,0,150)
 width = screen.get_width()
 height = screen.get_height()
 
+canvas_x = int(150)
+canvas_y = int(60)
+canvas_w = int(width - canvas_x *2)
+canvas_h = int(height - canvas_y *2)
+
+# w_unit = canvas_w / 10
+w_unit = canvas_w / 14
+monstersizes = [3,4,6,7,10]
+#monstersizes = [6,7,9,10,14]
+
 num = lnum = rnum = 0   # Variabler för utdata av användarens val
-btn_h = int(height / 10)
+btn_h = int(height / 10) # Knappars höjd
+btn_w = int(140) # Knappars höjd
+gap = int(5)
+
+enemy_x = btn_w
+
 tgleft = tgright = -1
 gameOver = False
-lp = rp = False
+lp = rp = False # Leftpressed and RightPressed
 smallfont = pygame.font.SysFont('Corbel',35)
 debug_text = smallfont.render('quit' , True , color)
 centerQuit = debug_text.get_rect(center=(width/2,35))
@@ -51,15 +70,18 @@ rightnum = smallfont.render(str(rnum), True, color)
 movetext = smallfont.render('0' , True , (0,0,0))
 events = pygame.event.get()
 
+# Where is the mouse cursor
 def lefty():
     mus = mouse[1]
     global mouseoverLeft
-    mouseoverLeft = int(mus/height*10+1)
+    # mouseoverLeft = int(mus/height*10+1)
+    mouseoverLeft = getValue()
 
 def righty():
     mus = mouse[1]
     global mouseoverRight
-    mouseoverRight = int(mus/height*10+1)
+    # mouseoverRight = int(mus/height*10+1)
+    mouseoverRight = getValue()
 
 def between():
     global mouseoverLeft
@@ -70,15 +92,44 @@ def between():
 def getValue():
     return int(mouse[1]/height*10+1)
 
-rectangle_list = []
+monster_list = []
+list_of_rows_size = []
 num_list = []
 
+def getSizeInd(nr):
+    if nr < 11:
+        si=0
+    elif nr < 31:
+        si=1
+    elif nr < 51:
+        si=2
+    elif nr < 71:
+        si=3
+    else:
+        si=4
+    return si
+
+rowFilled = 0
+
 def DropBlock():
+    global rowFilled
+    numberis = slumpfabrik.getRand()
+    sizeind = getSizeInd(numberis)
+    monster_w = int(w_unit * monstersizes[sizeind])
+
+    if rowFilled + monster_w > canvas_w:
+        rowFilled = 0
+        xpos = canvas_x
+    else:
+        xpos = canvas_x + rowFilled
+
+    rowFilled = rowFilled + monster_w
+
     for r in range(0,1):
-        rect = pygame.Rect(200, -100, width-400, 60)
-        rectangle_list.append(rect)
-        num_list.append(slumpfabrik.getRand())
-        if len(rectangle_list) > 10:
+        rect = pygame.Rect(xpos, -100, monster_w, 60)
+        monster_list.append(rect)
+        num_list.append(numberis)
+        if len(monster_list) > 10:
             global gameOver
             gameOver = True
 DropBlock()
@@ -136,24 +187,31 @@ while gameOver == False:
     #   ╔═╗╦  ╦╔═╗╔╗╔╔╦╗╔═╗
     #   ║╣ ╚╗╔╝║╣ ║║║ ║ ╚═╗
     #   ╚═╝ ╚╝ ╚═╝╝╚╝ ╩ ╚═╝
+
+    #   ╔═╗╦  ╦╔═╗╔╗╔╔╦╗╔═╗
+    #   ║╣ ╚╗╔╝║╣ ║║║ ║ ╚═╗
+    #   ╚═╝ ╚╝ ╚═╝╝╚╝ ╩ ╚═╝
+
     for ev in pygame.event.get():
         # Check for Sys Events
         if ev.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if ev.type == pygame.USEREVENT:# Time to drop new block
+        # Timer drops new block
+        if ev.type == pygame.USEREVENT:
             pygame.time.set_timer(pygame.USEREVENT, DropRate)  # 
             nrOfBlocksDroped += 1
             if DropRate > 3000 and nrOfBlocksDroped % 5 == 0:
                 DropRate -= 500
             DropBlock()
 
+
         # Then we Check if a Key is Pressed
         if ev.type == pygame.KEYDOWN:
-            if ev.key == pygame.K_SPACE:
-                if (target >= 0 and target < len(rectangle_list)):
+            if ev.key == pygame.K_SPACE:      #Space Key
+                if (target >= 0 and target < len(monster_list)):
                     print("space",target)
-                    rectangle_list.pop(target)
+                    monster_list.pop(target)
                     num_list.pop(target)
                     target = -1
 
@@ -221,20 +279,19 @@ while gameOver == False:
                 resnum = smallfont.render(str(lnum * rnum), True, color) 
             
             if 140 <= mouse[0] <= width-140 and height-60 <= mouse[1]: # Result Button
-                if (target >= 0 and target < len(rectangle_list)):
+                if (target >= 0 and target < len(monster_list)):
                     # print("space",target)
-                    rectangle_list.pop(target)
+                    monster_list.pop(target)
                     num_list.pop(target)
                     target = -1
 
 
-    pygame.draw.rect(screen,color_dark,[150,0,width-300,60])
-    pygame.draw.rect(screen,color_dark,[150,height-60,width-300,height])
-    pygame.draw.rect(screen,color,[150,60,width-300,height-120])
+    pygame.draw.rect(screen,color_dark,[150,0,width-300,60])    # debug background
+    pygame.draw.rect(screen,color_dark,[150,height-60,width-300,height])   # summary background
 
-    #pygame.draw.rect(screen,color_dark,[0,0,140,height])
-    #pygame.draw.rect(screen,color_dark,[width-140,0,width,height])
 
+
+    pygame.draw.rect(screen,color,[canvas_x,canvas_y,canvas_w,canvas_h]) # the CANVAS
  
     # Draw All Buttons of the Side-Panels
     for y in range(10):
@@ -243,11 +300,9 @@ while gameOver == False:
         yy = y * btn_h + 2
         #a if condition else b
 
-        pygame.draw.rect(screen,color_light if lnum-1 == y else color_dark,[0,yy,140,60])
-        pygame.draw.rect(screen,color_light if rnum-1 == y else color_dark,[width-140,yy,140,60])
-
-        #pygame.draw.rect(screen,color_dark,[0,yy,140,60])
-        #pygame.draw.rect(screen,color_dark,[width-140,yy,140,60])
+        # Draw the highighting rectangles
+        pygame.draw.rect(screen,color_light if lnum-1 == y else color_dark,[0,yy,btn_w,btn_h-gap])
+        pygame.draw.rect(screen,color_light if rnum-1 == y else color_dark,[width-btn_w,yy,btn_w,btn_h-gap])
 
         txt1 = smallfont.render(str(y+1), True, color) 
         screen.blit(txt1 , (0+70,yy))
@@ -263,12 +318,14 @@ while gameOver == False:
     
     # Move and Draw the "Enemies"
     v = [0,1]
+
     innerI = 0 # Index For Inside Below
     def EnemyMove():
         global innerI
-        for rectangle in rectangle_list:
-
-            if rectangle.bottom < (height - 60) - 60 * innerI:
+        for rectangle in monster_list:
+            # här gör vi valet om vi ska fortsätta att falla
+            # så det är här vi behöver checka om vi har något under oss
+            if rectangle.bottom < ((height - 60) - 60 * innerI):
                 rectangle.move_ip(v)
             if innerI == target:
                 pygame.draw.rect(screen, MIXED, rectangle)
