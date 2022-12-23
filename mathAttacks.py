@@ -41,6 +41,7 @@ canvas_w = int(width - canvas_x * 2)
 canvas_h = int(height - canvas_y * 2)
 # w_unit = canvas_w / 10
 w_unit = canvas_w / 16
+monsters.w_unit = canvas_w / 16
 monstersizes = [3, 4, 6, 7, 10]
 #monstersizes = [6,7,9,10,14]
 gap = int(5)
@@ -102,17 +103,19 @@ def getSizeInd(nr):
 
 rowFilled = 0
 rowsFilled = []
-
+rowsDistr = []
 def DropBlock():
     global rowFilled
+    # TODO packa alla variabler här i en lista (eller tuple)
+    # i objektet monster ist...
+    #   dvs [numberis, sizeind, monster_w]
     numberis = slumpfabrik.getRand()
     sizeind = getSizeInd(numberis)
     monster_w = int(w_unit * monstersizes[sizeind])
 
     if rowFilled + monster_w > canvas_w:
         rowsFilled.append([[rowFilled],[True]])
-
-        print(rowsFilled)
+        # print(rowsFilled)
         rowFilled = 0
         xpos = canvas_x
     else:
@@ -121,6 +124,7 @@ def DropBlock():
     rowFilled = rowFilled + monster_w
 
     for r in range(0, 1):
+        # TODO skapa en instans av monster här ist för rektangel.
         rect = pygame.Rect(xpos, -100, monster_w, btn_h)
         monster_list.append(rect)
         num_list.append(numberis)
@@ -189,16 +193,14 @@ while g.gameOver == False:
             lefty()
         # Right panel
         elif width-btn_w <= mouse[0] <= width:
-            pygame.draw.rect(screen, gui.alpha_light, [
-                             width-btn_w, 0, width, height])
+            pygame.draw.rect(screen, gui.alpha_light, [width-btn_w, 0, width, height])
             once = True
             righty()
         else:
             # Rest of the area ie the canvas
             if once:
                 pygame.draw.rect(screen, gui.dark, [0, 0, btn_w, height])
-                pygame.draw.rect(screen, gui.dark, [
-                                 width-btn_w, 0, width, height])
+                pygame.draw.rect(screen, gui.dark, [width-btn_w, 0, width, height])
                 once = False
             pass
         #   ╔═╗╦  ╦╔═╗╔╗╔╔╦╗╔═╗
@@ -289,7 +291,7 @@ while g.gameOver == False:
 
         def EnemyMove():
             global innerI
-            global breakrow
+            # global breakrow
             for rectangle in monster_list:
                 # här gör vi valet om vi ska fortsätta att falla
                 # så det är här vi behöver checka om vi har något under oss
@@ -301,7 +303,6 @@ while g.gameOver == False:
                 # blocken kan "hitta" en lucka
                 
                 if rectangle.bottom < ((height - btn_h) - btn_h * len(rowsFilled)):
-                #if rectangle.bottom < ((height - btn_h) - btn_h * innerI):
                     rectangle.move_ip(v)
                 if innerI == target:
                     pygame.draw.rect(screen, gui.MIXED, rectangle)
@@ -334,7 +335,6 @@ while g.gameOver == False:
         pygame.display.update()     # next frame
         debug_text = smallfont.render(
             str(g.nrOfBlocksDroped)+' quit '+str(g.DropRate), True, gui.white)
-        # print(lp,rp)
         clock.tick(60)  # pygame.display.flip()
 
 print("G A M E   O V E R")
