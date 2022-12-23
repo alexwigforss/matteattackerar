@@ -1,7 +1,7 @@
 """
 Initierat Github X
 Flödesshema 			Pågår
-TODO	Ge fiender bredd(did) och placering
+DID	Ge fiender bredd(did) och placering
 TODO	Klassifiera fiender och skapa en lista av sådanna
 TODO 	Separera events
 https://stackoverflow.com/questions/59631779/python-project-structure-multiple-files-and-modules
