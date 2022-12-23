@@ -1,10 +1,20 @@
+monstersizes = [3, 4, 6, 7, 10]
+w_unit = 0
+
 class Monster:
   def __init__(self,size,dist_ground,dist_tower):
-    self.size = size
+    # index # declared internal
+    
+    self.size = size # size index
     self.dist_ground = dist_ground
     self.dist_tower = dist_tower
-    grounded = False
-    state = 0
+    self.width = int(w_unit * monstersizes[sizeind])   
+    # troligtvis
+    # monster_w = int(w_unit * monstersizes[sizeind])
+
+    # eventuella
+    onRow = -1 #på vilken rad bor den (om minus ingen)
+    # grounded = False
 
   def __str__(self):
     return f"{self.size}({self.dist_ground})({self.dist_tower})"
