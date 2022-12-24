@@ -17,9 +17,6 @@ legend = """
  Välj Siffror med musen
  När man har en match kan man spränga med space"""
 
-# p1 = monsters.Monster(36,200,100)
-# p1.myfunc()
-# print(p1)
 run = True
 # init window
 clock = pygame.time.Clock()
@@ -29,40 +26,32 @@ screen = pygame.display.set_mode(res)   # Öppnar Ett Fönster
 
 width = screen.get_width()
 height = screen.get_height()
+gui.setWithHeight(width,height)
 actions.setWinSize(width, height)
+centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
 
 # used for drawing the canvas and calcualate rows
-btn_w = 140
-btn_h = 60
-actions.setBtnSize(btn_w, btn_h)
-canvas_x = int(btn_w + 10)
-canvas_y = int(btn_h)
+actions.setBtnSize(140, 60)
+gui.setButtonsSize(int(height / 10))
+canvas_x = int(gui.btn_w + 10)
+canvas_y = int(gui.btn_h)
 canvas_w = int(width - canvas_x * 2)
 canvas_h = int(height - canvas_y * 2)
 # w_unit = canvas_w / 10
 w_unit = canvas_w / 16
 monsters.w_unit = canvas_w / 16
 monstersizes = [3, 4, 6, 7, 10]
-#monstersizes = [6,7,9,10,14]
 gap = int(5)
 
 num = lnum = rnum = 0   # Variabler för utdata av användarens val
-
-gui.setButtonsSize(int(height / 10))
-
 enemy_x = gui.btn_w
 
 lp = rp = False  # Leftpressed and RightPressed
-smallfont = pygame.font.SysFont('Corbel', 35)
-debug_text = smallfont.render('quit', True, gui.white)
-centerQuit = debug_text.get_rect(center=(width/2, 35))
-txt1 = smallfont.render('1', True, gui.white)
 
 # Resulting number of chosen factors
-leftnum = smallfont.render(str(lnum), True, gui.white)
-rightnum = smallfont.render(str(rnum), True, gui.white)
-resnum = smallfont.render(str(num), True, gui.white)
-movetext = smallfont.render('0', True, (0, 0, 0))
+leftnum = gui.smallfont.render(str(lnum), True, gui.white)
+rightnum = gui.smallfont.render(str(rnum), True, gui.white)
+resnum = gui.smallfont.render(str(num), True, gui.white)
 events = pygame.event.get()
 
 # Where is the mouse cursor
@@ -125,7 +114,7 @@ def DropBlock():
 
     for r in range(0, 1):
         # TODO skapa en instans av monster här ist för rektangel.
-        rect = pygame.Rect(xpos, -100, monster_w, btn_h)
+        rect = pygame.Rect(xpos, -100, monster_w, gui.btn_h)
         monster_list.append(rect)
         num_list.append(numberis)
         if len(monster_list) > 30:
@@ -141,14 +130,14 @@ target = -1
 
 def lb_Changed():
     global leftnum, resnum
-    leftnum = smallfont.render(str(lnum), True, gui.white)
-    resnum = smallfont.render(str(lnum * rnum), True, gui.white)
+    leftnum = gui.smallfont.render(str(lnum), True, gui.white)
+    resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
 
 
 def rb_Changed():
     global rightnum, resnum
-    rightnum = smallfont.render(str(rnum), True, gui.white)
-    resnum = smallfont.render(str(lnum * rnum), True, gui.white)
+    rightnum = gui.smallfont.render(str(rnum), True, gui.white)
+    resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
 
 
 def cyclicInc(var, limit=10):
@@ -180,27 +169,27 @@ while g.gameOver == False:
         # stores the (x,y) coordinates into the variable as a tuple
         mouse = pygame.mouse.get_pos()
         # Quit Button
-        if btn_w <= mouse[0] <= width-btn_w and btn_h >= mouse[1]:
-            pygame.draw.rect(screen, gui.light, [0+150, 0, width-300, btn_h])
+        if gui.btn_w <= mouse[0] <= width-gui.btn_w and gui.btn_h >= mouse[1]:
+            pygame.draw.rect(screen, gui.light, [0+150, 0, width-300, gui.btn_h])
         # Launch Button
-        elif btn_w <= mouse[0] <= width-btn_w and height-btn_h <= mouse[1]:
+        elif gui.btn_w <= mouse[0] <= width-gui.btn_w and height-gui.btn_h <= mouse[1]:
             pygame.draw.rect(screen, gui.light, [
-                             150, height-btn_h, width-300, height])
+                             150, height-gui.btn_h, width-300, height])
         # Left panel
-        elif 0 <= mouse[0] <= 0+btn_w:
-            pygame.draw.rect(screen, gui.alpha_light, [0, 0, btn_w, height])
+        elif 0 <= mouse[0] <= 0+gui.btn_w:
+            pygame.draw.rect(screen, gui.alpha_light, [0, 0, gui.btn_w, height])
             once = True
             lefty()
         # Right panel
-        elif width-btn_w <= mouse[0] <= width:
-            pygame.draw.rect(screen, gui.alpha_light, [width-btn_w, 0, width, height])
+        elif width-gui.btn_w <= mouse[0] <= width:
+            pygame.draw.rect(screen, gui.alpha_light, [width-gui.btn_w, 0, width, height])
             once = True
             righty()
         else:
             # Rest of the area ie the canvas
             if once:
-                pygame.draw.rect(screen, gui.dark, [0, 0, btn_w, height])
-                pygame.draw.rect(screen, gui.dark, [width-btn_w, 0, width, height])
+                pygame.draw.rect(screen, gui.dark, [0, 0, gui.btn_w, height])
+                pygame.draw.rect(screen, gui.dark, [width-gui.btn_w, 0, width, height])
                 once = False
             pass
         #   ╔═╗╦  ╦╔═╗╔╗╔╔╦╗╔═╗
@@ -218,10 +207,10 @@ while g.gameOver == False:
                         num_list.pop(target)
                         target = -1
                 if e == 'KEY_LEFT_PRESSED':
-                    pygame.draw.rect(screen, gui.alpha_light,[0, 0, btn_w, height])
+                    pygame.draw.rect(screen, gui.alpha_light,[0, 0, gui.btn_w, height])
                     lp = True
                 if e == 'KEY_RIGHT_PRESSED':
-                    pygame.draw.rect(screen, gui.alpha_light, [width-btn_w, 0, width, height])
+                    pygame.draw.rect(screen, gui.alpha_light, [width-gui.btn_w, 0, width, height])
                     rp = True
                 if e == 'KEY_UP_PRESSED':
                     if lp == True:
@@ -238,20 +227,20 @@ while g.gameOver == False:
                         rnum = cyclicInc(rnum)
                         rb_Changed()
                 if e == 'KEY_UP_RELEASED':
-                    pygame.draw.rect(screen, gui.dark, [0, 0, btn_w, height])
+                    pygame.draw.rect(screen, gui.dark, [0, 0, gui.btn_w, height])
                     lp = False
                 if e == 'KEY_DOWN_RELEASED':
-                    pygame.draw.rect(screen, gui.dark, [width-btn_w, 0, width, height])
+                    pygame.draw.rect(screen, gui.dark, [width-gui.btn_w, 0, width, height])
                     rp = False
             if e.startswith('BTN'):
                 if e == 'BTN_LEFT':
                     lnum = getValue()
-                    leftnum = smallfont.render(str(lnum), True, gui.white)
-                    resnum = smallfont.render(str(lnum * rnum), True, gui.white)
+                    leftnum = gui.smallfont.render(str(lnum), True, gui.white)
+                    resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
                 if e == 'BTN_RIGHT':
                     rnum = getValue()
-                    rightnum = smallfont.render(str(rnum), True, gui.white)
-                    resnum = smallfont.render(str(lnum * rnum), True, gui.white)
+                    rightnum = gui.smallfont.render(str(rnum), True, gui.white)
+                    resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
                 if e == 'BTN_LAUNCH':
                     if (target >= 0 and target < len(monster_list)):
                         monster_list.pop(target)
@@ -259,9 +248,9 @@ while g.gameOver == False:
                         target = -1
 
         # debug background
-        pygame.draw.rect(screen, gui.dark, [150, 0, width-300, btn_h])
+        pygame.draw.rect(screen, gui.dark, [150, 0, width-300, gui.btn_h])
         # summary background
-        pygame.draw.rect(screen, gui.dark, [150, height-btn_h, width-300, height])
+        pygame.draw.rect(screen, gui.dark, [150, height-gui.btn_h, width-300, height])
         pygame.draw.rect(screen, gui.white, [canvas_x, canvas_y, canvas_w, canvas_h])  # the CANVAS
 
         # Draw All Buttons of the Side-Panels
@@ -272,13 +261,13 @@ while g.gameOver == False:
             pygame.draw.rect(screen, gui.light if lnum-1 == y else gui.dark,[0, yy, gui.btn_w, gui.btn_h-gap])
             pygame.draw.rect(screen, gui.light if rnum-1 == y else gui.dark,[width-gui.btn_w, yy, gui.btn_w, gui.btn_h-gap])
 
-            txt1 = smallfont.render(str(y+1), True, gui.white)
+            txt1 = gui.smallfont.render(str(y+1), True, gui.white)
             screen.blit(txt1, (0+70, yy))
             screen.blit(txt1, (width-70, yy))
             # print()
 
         # Skriver ut debugtexten
-        screen.blit(debug_text, centerQuit)
+        screen.blit(gui.debug_text, centerQuit)
         # Skriver ut Nummren på nedersta listen
         screen.blit(resnum, (width/2, height-50))
         screen.blit(leftnum, (width*0.25, height-50))
@@ -302,16 +291,14 @@ while g.gameOver == False:
                 # att poppa hela raden ur rowsfilled kan fixa men snyggare om
                 # blocken kan "hitta" en lucka
                 
-                if rectangle.bottom < ((height - btn_h) - btn_h * len(rowsFilled)):
+                if rectangle.bottom < ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
                     rectangle.move_ip(v)
                 if innerI == target:
                     pygame.draw.rect(screen, gui.MIXED, rectangle)
                 else:
                     pygame.draw.rect(screen, gui.RED, rectangle)
-                movetext = smallfont.render(
-                    str(num_list[innerI]), True, (0, 0, 0))
-                centerText = movetext.get_rect(
-                    center=(rectangle.centerx, rectangle.centery))
+                movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
+                centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
                 innerI += 1
         EnemyMove()
@@ -333,8 +320,7 @@ while g.gameOver == False:
             # print("Inget Hittat")
 
         pygame.display.update()     # next frame
-        debug_text = smallfont.render(
-            str(g.nrOfBlocksDroped)+' quit '+str(g.DropRate), True, gui.white)
+        debug_text = gui.smallfont.render(str(g.nrOfBlocksDroped)+' quit '+str(g.DropRate), True, gui.white)
         clock.tick(60)  # pygame.display.flip()
 
 print("G A M E   O V E R")
