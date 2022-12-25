@@ -71,3 +71,7 @@ def DropBlock():
         if len(monster_list) > 30:
             # global g.gameOver
             g.gameOver = True
+
+# TODO Falling
+# TODO Searchforgap
+# TODO Spaceing

@@ -274,7 +274,7 @@ while g.gameOver == False:
         screen.blit(rightnum, (width*0.75, height-50))
 
         # Move and Draw the "Enemies"
-        v = [0, 4]
+        v = [0, 3]
 
         innerI = 0  # Index For Inside Below
 

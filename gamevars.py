@@ -1,3 +1,3 @@
 nrOfBlocksDroped = 0
-DropRate = 3000
+DropRate = 4000
 gameOver = False
