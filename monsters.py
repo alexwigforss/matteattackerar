@@ -2,23 +2,27 @@ import slumpfabrik
 
 # TODO Bäst tror jag om monster importerar en modul som är rummet
 #   som sköter hur dem rellaterar till varandra och canvas.
-
+#   eller om monster själv ska ha funktioner fast statiskt utanför klassen
 monstersizes = [3, 4, 6, 7, 10]
 w_unit = 0
+INDEX = 0
 
 class Monster:
-  def __init__(self,size,dist_ground,dist_tower):
-    # index # declared internal
-    
-    self.size = size # size index
-    self.dist_ground = dist_ground
-    self.dist_tower = dist_tower
-    self.width = int(w_unit * monstersizes[self.size])
-    # troligtvis
-    # monster_w = int(w_unit * monstersizes[sizeind])
+  def __init__(self,dist_ground,dist_tower):
+    global INDEX
+    self.index = INDEX# declared internal
+    INDEX += 1
+    self.dist_ground = dist_ground  # Avstånd till mark
+    self.dist_tower = dist_tower    # Avstånd till torn
+    self.numberis = slumpfabrik.getRand()   # Akillesnummret
+    self.size = getSizeInd(self.numberis)   # Breddens multiplikationskoficient
+    self.width = int(w_unit * monstersizes[self.size])  # Blockets bredd i pixel
     # eventuella
-    onRow = -1 #på vilken rad bor den (om minus ingen)
+    # onRow = -1 #på vilken rad bor den (om minus ingen)
     # grounded = False # kanske inte nödvändig
+    monsterBornMsg = "Index: {0} Dist_G: {1} Dist_T: {2} Nr: {3} Size: {4} Width: {5}."
+    print(monsterBornMsg.format(self.index, self.dist_ground, self.dist_tower, self.numberis, self.size, self.width))
+    #print("index: " + str(self.index))
 
   def __str__(self):
     return f"{self.size}({self.dist_ground})({self.dist_tower})"
@@ -44,34 +48,18 @@ def getSizeInd(nr):
         si = 4
     return si
 
-def DropBlock():
-    global rowFilled
-    # TODO packa alla variabler här i en lista (eller tuple)
-    # i objektet monster ist...
-    #   dvs [numberis, sizeind, monster_w]
-    numberis = slumpfabrik.getRand()
-    sizeind = getSizeInd(numberis)
-    monster_w = int(w_unit * monstersizes[sizeind])
-
-    if rowFilled + monster_w > canvas_w:
-        rowsFilled.append([[rowFilled],[True]])
-        # print(rowsFilled)
-        rowFilled = 0
-        xpos = canvas_x
-    else:
-        xpos = canvas_x + rowFilled
-
-    rowFilled = rowFilled + monster_w
-
-    for r in range(0, 1):
-        # TODO skapa en instans av monster här ist för rektangel.
-        rect = pygame.Rect(xpos, -100, monster_w, gui.btn_h)
-        monster_list.append(rect)
-        num_list.append(numberis)
-        if len(monster_list) > 30:
-            # global g.gameOver
-            g.gameOver = True
-
 # TODO Falling
 # TODO Searchforgap
 # TODO Spaceing
+"""
+PSEUDO GAPSEARCH
+För varje rad
+    Om lucka finns
+        Tills Match är över Gap
+            I raden ovan om match finns & fri lejd
+                Gå mot lucka
+            Annars om lucka finns & ej fri lejd
+                Klossarna under går mot lucka
+        Sedan när Math är över Gap
+            Fall ned i luckan
+"""

@@ -7,7 +7,7 @@
 import actions
 import gui
 import gamevars as g
-import monsters
+import monsters as m
 import slumpfabrik
 from pygame.locals import *  # QUIT event needs this
 import pygame
@@ -39,7 +39,7 @@ canvas_w = int(width - canvas_x * 2)
 canvas_h = int(height - canvas_y * 2)
 # w_unit = canvas_w / 10
 w_unit = canvas_w / 16
-monsters.w_unit = canvas_w / 16
+m.w_unit = canvas_w / 16
 monstersizes = [3, 4, 6, 7, 10]
 gap = int(5)
 
@@ -89,56 +89,47 @@ def getSizeInd(nr):
     else:
         si = 4
     return si
-
+monsterList = []
 rowFilled = 0
 rowsFilled = []
 rowsDistr = []
 def DropBlock():
     global rowFilled
-    # TODO packa alla variabler här i en lista (eller tuple)
-    # i objektet monster ist...
-    #   dvs [numberis, sizeind, monster_w]
-    numberis = slumpfabrik.getRand()
-    sizeind = getSizeInd(numberis)
-    monster_w = int(w_unit * monstersizes[sizeind])
-
-    if rowFilled + monster_w > canvas_w:
-        rowsFilled.append([[rowFilled],[True]])
+    monsterList.append(m.Monster(canvas_h,canvas_h)) # Andra ska va canvas_h - tower_h
+    # Om monster + översta raden är bredare än canvas
+    if rowFilled + monsterList[-1].width > canvas_w:
+        rowsFilled.append([[rowFilled],[True]]) # Skapa ny rad
+        rowFilled = 0   # Töm rowFilled
         # print(rowsFilled)
-        rowFilled = 0
         xpos = canvas_x
-    else:
+    else: # Annars
         xpos = canvas_x + rowFilled
 
-    rowFilled = rowFilled + monster_w
+    rowFilled = rowFilled + monsterList[-1].width
 
     for r in range(0, 1):
         # TODO skapa en instans av monster här ist för rektangel.
-        rect = pygame.Rect(xpos, -100, monster_w, gui.btn_h)
+        rect = pygame.Rect(xpos, -100, monsterList[-1].width, gui.btn_h)
         monster_list.append(rect)
-        num_list.append(numberis)
+        num_list.append(monsterList[-1].numberis)
         if len(monster_list) > 30:
             # global g.gameOver
             g.gameOver = True
-
 
 DropBlock()
 
 global target
 target = -1
 
-
 def lb_Changed():
     global leftnum, resnum
     leftnum = gui.smallfont.render(str(lnum), True, gui.white)
     resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
 
-
 def rb_Changed():
     global rightnum, resnum
     rightnum = gui.smallfont.render(str(rnum), True, gui.white)
     resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
-
 
 def cyclicInc(var, limit=10):
     if var < limit:
@@ -147,15 +138,12 @@ def cyclicInc(var, limit=10):
         var = 1
     return var
 
-
 def cyclicDec(var, limit=10):
     if var > 1:
         var -= 1
     else:
         var = limit
     return var
-
-
 #    _  _  _  _____  _  ____     _         ___    ___   ____
 #   | ||_|| |(____ || ||  _ \   | |       / _ \  / _ \ |  _ \
 #   | |   | |/ ___ || || | | |  | |_____ | |_| || |_| || |_| |
@@ -282,14 +270,7 @@ while g.gameOver == False:
             global innerI
             # global breakrow
             for rectangle in monster_list:
-                # här gör vi valet om vi ska fortsätta att falla
-                # så det är här vi behöver checka om vi har något under oss
-                # BUG Just nu att rowsFilled läggs till när blocket skapas
-                # ska det kunna falla flera samtidigt måste det ske när dem landat snarare
-                # annars blir det luckor i mönstret
-                # BUG 2 sedan ska de ju fortsätta falla när det blir tomt under
-                # att poppa hela raden ur rowsfilled kan fixa men snyggare om
-                # blocken kan "hitta" en lucka
+                # TODO innerI bör öka när ett block landat ist för när det uppstår
                 
                 if rectangle.bottom < ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
                     rectangle.move_ip(v)
