@@ -2,8 +2,25 @@
 Initierat Github X
 Flödesshema 			Pågår
 DID	Ge fiender bredd(did) och placering
-TODO	Klassifiera fiender och skapa en lista av sådanna
-TODO 	Separera events
+DID ge rätt sorlek till rätt tal
+DID få dem att släppas i x-led där det finns plats
+DID	Klassifiera fiender och skapa en lista av sådanna
+DID 	Separera events
+TODO Update monster vars (distground disttower etc)
+TODO Pausfunktion
+TODO Flytta var tornets höjd ökas
+TODO Metoder för att söka/öppna lucka
+DVS	# TODO Falling
+	# TODO Searchforgap
+	# TODO Spaceing
+TODO Knyt ihop Monster med Division & +/-
+TODO GUI-variant för förstagradsekvation.
+TODO Knyt ihop Monster med förstagradsekvation.
+TODO cirkeldiagram ist fär att skriva ut fraktionerna med siffror
+TODO Implementera problemz ist för slumpfabrik
+TODO Test test test
+
+
 https://stackoverflow.com/questions/59631779/python-project-structure-multiple-files-and-modules
 https://gamedev.stackexchange.com/questions/77491/splitting-pygame-functionality-between-classes-or-modules
 
@@ -11,8 +28,6 @@ https://gamedev.stackexchange.com/questions/77491/splitting-pygame-functionality
 https://blog.finxter.com/python-one-line-if-not-none/
 https://pythonbasics.org/static-method/
 
-Bygg om slumpfabriken till klasser
-Bygg ut slumpfabriken med klasser för Division +/- och förstagradsekvation
 
 Gui StartSkärm - In prog
 

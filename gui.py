@@ -17,6 +17,12 @@ smallfont = pygame.font.SysFont('Corbel', 35)
 debug_text = smallfont.render('quit', True, white)
 txt1 = smallfont.render('1', True, white)
 
+def updateDebugText(left,right):
+    global debug_text
+    # debug_text = smallfont.render(str(left) + ' quit ' + str(right), True, white)
+    debug_text = smallfont.render(str(left) + ' q ' + str(right), True, white)
+    return
+
 def setButtonsSize(var):
     global btn_h
     global btn_w

@@ -1,34 +1,40 @@
 import slumpfabrik
 
-# TODO Bäst tror jag om monster importerar en modul som är rummet
-#   som sköter hur dem rellaterar till varandra och canvas.
-#   eller om monster själv ska ha funktioner fast statiskt utanför klassen
 monstersizes = [3, 4, 6, 7, 10]
 w_unit = 0
 INDEX = 0
-
 class Monster:
   def __init__(self,dist_ground,dist_tower):
     global INDEX
     self.index = INDEX# declared internal
-    INDEX += 1
+    INDEX = INDEX + 1
     self.dist_ground = dist_ground  # Avstånd till mark
     self.dist_tower = dist_tower    # Avstånd till torn
     self.numberis = slumpfabrik.getRand()   # Akillesnummret
     self.size = getSizeInd(self.numberis)   # Breddens multiplikationskoficient
     self.width = int(w_unit * monstersizes[self.size])  # Blockets bredd i pixel
+    self.onRow = -1 #på vilken rad bor den (om minus ingen)
     # eventuella
-    # onRow = -1 #på vilken rad bor den (om minus ingen)
     # grounded = False # kanske inte nödvändig
-    monsterBornMsg = "Index: {0} Dist_G: {1} Dist_T: {2} Nr: {3} Size: {4} Width: {5}."
-    print(monsterBornMsg.format(self.index, self.dist_ground, self.dist_tower, self.numberis, self.size, self.width))
-    #print("index: " + str(self.index))
+    monsterBornMsg = "Index: {0} Dist_G: {1} Dist_T: {2} Nr: {3} Size: {4} Width: {5} Row: {6}."
+    #print(monsterBornMsg.format(self.index, self.dist_ground, self.dist_tower, self.numberis, self.size, self.width, self.onRow))
 
   def __str__(self):
-    return f"{self.size}({self.dist_ground})({self.dist_tower})"
+    return f"Index: {self.index} Dist_G: {self.dist_ground} Dist_T: {self.dist_tower} Nr: {self.numberis} Size: {self.size} Width: {self.width} Row: {self.onRow}."
 
-  def myfunc(s):
-    print("Im the monster ")
+  def updateRow(self,row):
+    self.onRow += row
+    return self.onRow
+
+  def updateDistGround(self,cnvh,rectbtm):
+    self.dist_ground = cnvh-rectbtm
+    return self.dist_tower
+
+  def updateDistTower(self,cnvh,rectbtm):
+    self.dist_tower = cnvh-rectbtm
+    return self.dist_tower
+  
+  #def
 
 if __name__ == "__main__":
     p1 = Monster(36,200,100)
