@@ -1,4 +1,11 @@
+# REFS  https://www.pygame.org/docs/ref/rect.html#pygame.Rect.collidelist
+#       https://www.geeksforgeeks.org/python-convert-a-list-to-dictionary/
+#       https://www.geeksforgeeks.org/python-list-slicing/
+
+#       Fold Everything     Ctrl+K , Ctrl+0
+
 # TODO Flytta var inner_I ökas
+import os
 import actions
 import gui
 import gamevars as g
@@ -17,6 +24,7 @@ height = screen.get_height()
 gui.setWithHeight(width,height)
 actions.setWinSize(width, height)
 centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
+center1 = gui.debug_text.get_rect(center=(width/2, 135))
 
 # used for drawing the canvas and calcualate rows
 actions.setBtnSize(140, 60)
@@ -26,10 +34,8 @@ canvas_x = int(gui.btn_w + 10)
 canvas_y = int(gui.btn_h)
 canvas_w = int(width - canvas_x * 2)
 canvas_h = int(height - canvas_y * 2)
-# w_unit = canvas_w / 10
-w_unit = canvas_w / 16
 m.w_unit = canvas_w / 16
-monstersizes = [3, 4, 6, 7, 10]
+# monstersizes = [3, 4, 6, 7, 10]
 gap = int(5)
 
 num = lnum = rnum = 0   # Variabler för utdata av användarens val
@@ -54,7 +60,7 @@ def between():
     global mouseoverRight
     mouseoverLeft = 0
     mouseoverRight = 0
-global mouse
+# global mouse
 mouse = pygame.mouse.get_pos()
 def getValue():
     return int(mouse[1]/height*10+1)
@@ -62,14 +68,19 @@ rect_list = []
 list_of_rows_size = []
 num_list = []
 monsterList = []
+
 rowFilled = 0
 rowsFilled = []
 rowDistr = []
 rowsDistr = []
+
 ground = height - gui.btn_h
+
 def DropBlock():
     global rowFilled, rowsFilled, rowDistr, rowsDistr
-    monsterList.append(m.Monster(canvas_h,canvas_h)) # Andra ska va canvas_h - tower_h
+    g.nrOfBlocksDroped += 1
+    g.nrOfBlocks += 1
+    monsterList.append(m.Monster(canvas_h,canvas_h))
     # Om monster + översta raden är bredare än canvas
     if rowFilled + monsterList[-1].width > canvas_w:
         rowDistr += canvas_w-rowFilled,False
@@ -77,7 +88,7 @@ def DropBlock():
         rowDistr = []
         rowsFilled.append([[rowFilled],[True]]) # Skapa ny rad
         rowFilled = 0   # Töm rowFilled
-        print(rowsDistr[-1])
+        # print(rowsDistr[-1])
         xpos = canvas_x
     else: # Annars
         xpos = canvas_x + rowFilled
@@ -85,13 +96,13 @@ def DropBlock():
     rowDistr += monsterList[-1].width,True
     rowFilled = rowFilled + monsterList[-1].width
 
-    for r in range(0, 1):
-        rect = pygame.Rect(xpos, -100, monsterList[-1].width, gui.btn_h)
-        rect_list.append(rect)
-        num_list.append(monsterList[-1].numberis)
-        if len(rowsFilled) > 8:
-            # global g.gameOver
-            g.gameOver = True
+    #rect = pygame.Rect(xpos, -100, monsterList[-1].width, gui.btn_h)
+    rect = pygame.Rect(xpos, 0, monsterList[-1].width, gui.btn_h)
+    rect_list.append(rect)
+    num_list.append(monsterList[-1].numberis)
+    if len(rowsFilled) > 8:
+        g.gameOver = True
+
 DropBlock()
 
 global target
@@ -121,30 +132,54 @@ def cyclicDec(var, limit=10):
         var = limit
     return var
 
-def killer():
-    rect_list.pop(target)
-    # Minskar rowfill med bredd av den sprängda
-    rowFilled = rowFilled - monsterList[target].width
-    num_list.pop(target)
-    target = -1
-    return
+def killer(t):
+    global rect_list, num_list, rowsFilled, monsterList
+    g.nrOfBlocks -= 1
+    rect_list.pop(t)
+    num_list.pop(t)
+    monsterList.pop(t)
+    search = 0
+    for e in rowsDistr:
+        for x in range(1, len(e)-1, 2):
+            if e[x] == True:
+                if search == t:
+                    e[x] = False
+                search += 1
+    return target -1
 
-once = True
-def mouseHooverChecks():
-    global once,mouse,screen
+def isEveryBoolFalse(row):
+    blist = row[1::2]
+    if True in blist:
+        return False
+    else:
+        return True
+
+"""def countTruesInDistr():
+    global rowsDistr
+    c = 0
+    for item in rowsDistr:
+        c += item.count(True)
+    return c"""
     #   ╦ ╦┌─┐┌─┐┬  ┬┌─┐┬─┐  ╔═╗┬ ┬┌─┐┌─┐┬┌─┌─┐
     #   ╠═╣│ ││ │└┐┌┘├┤ ├┬┘  ║  ├─┤├┤ │  ├┴┐└─┐
     #   ╩ ╩└─┘└─┘ └┘ └─┘┴└─  ╚═╝┴ ┴└─┘└─┘┴ ┴└─┘
+# gui.mouseHooverChecks(screen, mouse)
+
+def mouseHooverChecks():
+    # TODO  fixa varianten i gui
+    global mouse,screen
+    once = True
     # stores the (x,y) coordinates into the variable as a tuple
-    # TODO Move hovercheck to own method
     mouse = pygame.mouse.get_pos()
-    
+   
     # Quit Button
     if gui.btn_w <= mouse[0] <= width-gui.btn_w and gui.btn_h >= mouse[1]:
         pygame.draw.rect(screen, gui.light, [0+150, 0, width-300, gui.btn_h])
+        #once = False
     # Launch Button
     elif gui.btn_w <= mouse[0] <= width-gui.btn_w and height-gui.btn_h <= mouse[1]:
         pygame.draw.rect(screen, gui.light, [150, height-gui.btn_h, width-300, height])
+        #once = False
     # Left panel
     elif 0 <= mouse[0] <= 0+gui.btn_w:
         pygame.draw.rect(screen, gui.alpha_light, [0, 0, gui.btn_w, height])
@@ -161,8 +196,6 @@ def mouseHooverChecks():
             pygame.draw.rect(screen, gui.dark, [0, 0, gui.btn_w, height])
             pygame.draw.rect(screen, gui.dark, [width-gui.btn_w, 0, width, height])
             once = False
-        pass
-
     return
 
 def grounded():
@@ -175,6 +208,7 @@ def grounded():
 #                                                      |_|
 while g.gameOver == False:
         # print(monsterList[0]) # Uncoment to show the first monster in list
+        # gui.mouseHooverChecks(screen)
         mouseHooverChecks()
         #   ╔═╗╦  ╦╔═╗╔╗╔╔╦╗╔═╗
         #   ║╣ ╚╗╔╝║╣ ║║║ ║ ╚═╗
@@ -183,13 +217,12 @@ while g.gameOver == False:
         if e != None:
             # print(e)
             if e == 'DROP_BLOCK':
+                #if g.nrOfBlocks < 10:
                 DropBlock()
             if e.startswith('KEY'):
                 if e == 'KEY_SPACE_PRESSED':
                     if (target >= 0 and target < len(rect_list)):
-                        rect_list.pop(target)
-                        num_list.pop(target)
-                        target = -1
+                        target = killer(target)
                 if e == 'KEY_LEFT_PRESSED':
                     pygame.draw.rect(screen, gui.alpha_light,[0, 0, gui.btn_w, height])
                     lp = True
@@ -227,7 +260,7 @@ while g.gameOver == False:
                     resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
                 if e == 'BTN_LAUNCH':
                     if (target >= 0 and target < len(rect_list)):
-                        killer()
+                        target = killer(target)
 
         # debug background
         pygame.draw.rect(screen, gui.dark, [150, 0, width-300, gui.btn_h])
@@ -247,20 +280,22 @@ while g.gameOver == False:
             txt1 = gui.smallfont.render(str(y+1), True, gui.white)
             screen.blit(txt1, (0+70, yy))
             screen.blit(txt1, (width-70, yy))
-            # print()
 
 #        ____ ____  ___    __  __ ___  ___ 
 #       (  _ (  _ \/ __)  (  \/  / __)/ __)
 #        )(_) ) _ ( (_-.   )    (\__ ( (_-.
 #       (____(____/\___/  (_/\/\_(___/\___/
-
         # Skriver ut debugtexten
-        msgLeft = str(ground) + ' ' + str(g.nrOfBlocksDroped) +' '+ str(len(rowsFilled))
-        msgRight = str(monsterList[-1].dist_ground) + ' ' + str(monsterList[-1].dist_ground) + ' ' + str(rect_list[-1].bottom)
-        # msgRight = str(monsterList[-1].onRow)
+        msgLeft = str(g.nrOfBlocksDroped) +' '+ str(g.nrOfBlocks)
+        msgRight = str(target)
         gui.updateDebugText(msgLeft,msgRight)
+        gui.updateDebugText2(rowFilled)
         centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
+        center1 = gui.debug_text2.get_rect(center=(width/2, 85))
+
+        # Skriver ut debugtexter
         screen.blit(gui.debug_text, centerQuit,)
+        screen.blit(gui.debug_text2, center1,)
 
         # Skriver ut Nummren på nedersta listen
         screen.blit(resnum, (width/2, height-50))
@@ -269,37 +304,77 @@ while g.gameOver == False:
 
         # Move and Draw the "Enemies"
         v = [0, 3]
+        l = [-1,0]
+        r = [1,0]
+        
+        # mouserect = pygame.Rect([mouse[0],mouse[1], 100, 100])
+        # pygame.draw.rect(screen, gui.BLUE, mouserect)  # the CANVAS
 
         innerI = 0  # Index For Inside Below
 
+        """
+        sizeOfRectList = len(monsterList)
+        def Convert(lst):
+            res_dct = map(lambda i: (lst[i], lst[i+1]), range(len(lst)-1)[::2])
+            return dict(res_dct)innerI
+        if  sizeOfRectList > 0:
+            rect_dict = Convert(monsterList)
+        """
+        # print(rect_dict)
+
         def EnemyMove():
             global innerI
-            # global breakrow
             for rectangle in rect_list:
-                if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
+                ghostrect = rectangle
+                ghostrect.move(v)
+                # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
+                # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsDistr)):
+                # if rectangle.bottom <= (height - gui.btn_h):
+                reslist = ghostrect.collidelistall(rect_list[0:innerI])
+                print(reslist)
+                if rectangle.bottom <= (height - gui.btn_h) and not reslist:
+                # if rectangle.collidelistall(rect_list) == []:
                     rectangle.move_ip(v)
-                    monsterList[innerI].updateDistGround(canvas_h,rectangle.bottom)
-                    monsterList[innerI].updateDistTower(canvas_h*len(rowsFilled),rectangle.bottom)
                 else:
                     if monsterList[innerI].onRow < 0:
                         monsterList[innerI].updateRow(len(rowsFilled)+1)
-                        pass
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
                     pygame.draw.rect(screen, gui.MIXED, rectangle)
-                    #pass
                 else:
                     # Draw Regular here
                     pygame.draw.rect(screen, gui.RED, rectangle,width=5)
-                    #pass
-                movetext = gui.smallfont.render(str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow), True, (0, 0, 0))
+                #movetext = gui.smallfont.render(str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow), True, (0, 0, 0))
+                movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
                 centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
                 innerI += 1
         EnemyMove()
+
+        #print(rect_list[-1].collidelist(rect_list[0:-1]))
+        #print(mouserect.collidelist(rect_list))
+        #print(mouserect.collidelistall(rect_list))
+
+        rowNr = 0
+        for row in rowsDistr:
+            if isEveryBoolFalse(row):
+                rowsDistr.pop(rowNr)
+                rowsFilled.pop(rowNr)
+                ri = 0
+                for monster in monsterList:
+                    monster.setRow(-1)
+                    #print(monster)
+                    ri += 1
+            rowNr +=1
+
+
+
+        # row = 0
+        #gui.debugDistr(screen,ground,rowsDistr)
+         
+        gui.debugdraw(screen,ground)
         
-        pygame.draw.line(screen, gui.RED, (0,ground), (width,ground), 1)
-        
+
         # Ser Om Vi Har En lösning
         inI = 0  # Index For Inside Below
         # TargetSearch
