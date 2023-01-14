@@ -25,7 +25,7 @@ def checkEvents():
         #run = False # set local variable
         if ev.type == pygame.USEREVENT:
             pygame.time.set_timer(pygame.USEREVENT, g.DropRate)  # 
-            g.nrOfBlocksDroped += 1
+            
             if g.DropRate > 3000 and g.nrOfBlocksDroped % 5 == 0:
                 g.DropRate -= 500
             return 'DROP_BLOCK'
