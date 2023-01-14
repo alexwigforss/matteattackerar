@@ -22,17 +22,21 @@ class Monster:
   def __str__(self):
     return f"Index: {self.index} Dist_G: {self.dist_ground} Dist_T: {self.dist_tower} Nr: {self.numberis} Size: {self.size} Width: {self.width} Row: {self.onRow}."
 
+  def setRow(self,row):
+    self.onRow += row
+    return self.onRow
+
   def updateRow(self,row):
     self.onRow += row
     return self.onRow
 
-  def updateDistGround(self,cnvh,rectbtm):
-    self.dist_ground = cnvh-rectbtm
-    return self.dist_tower
+  # def updateDistGround(self,cnvh,rectbtm):
+  #   self.dist_ground = cnvh-rectbtm
+  #   return self.dist_tower
 
-  def updateDistTower(self,cnvh,rectbtm):
-    self.dist_tower = cnvh-rectbtm
-    return self.dist_tower
+  # def updateDistTower(self,cnvh,rectbtm):
+  #   self.dist_tower = cnvh-rectbtm
+  #   return self.dist_tower
   
   #def
 
