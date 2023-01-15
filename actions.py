@@ -3,6 +3,17 @@ import gamevars as g
 pygame.init()
 pygame.time.set_timer(pygame.USEREVENT, g.DropRate)  # 
 
+def timerWait():
+    #pygame.time.set_timer(pygame.USEREVENT, 0)  # 
+    pygame.time.wait(60)
+
+
+def timerOff():
+    pygame.time.set_timer(pygame.USEREVENT, 0)  # 
+
+def timerOn():
+    pygame.time.set_timer(pygame.USEREVENT, g.DropRate)  # 
+
 def setBtnSize(w,h):
     global btn_w
     global btn_h
@@ -24,11 +35,11 @@ def checkEvents():
             exit()
         #run = False # set local variable
         if ev.type == pygame.USEREVENT:
-            pygame.time.set_timer(pygame.USEREVENT, g.DropRate)  # 
-            
-            if g.DropRate > 3000 and g.nrOfBlocksDroped % 5 == 0:
-                g.DropRate -= 500
-            return 'DROP_BLOCK'
+            if not g.paused:
+                pygame.time.set_timer(pygame.USEREVENT, g.DropRate)  # 
+                if g.DropRate > 3000 and g.nrOfBlocksDroped % 5 == 0:
+                    g.DropRate -= 500
+                return 'DROP_BLOCK'
         if ev.type == pygame.KEYDOWN:
             if ev.key == pygame.K_SPACE:  #Left Key
                 return 'KEY_SPACE_PRESSED'
@@ -40,6 +51,8 @@ def checkEvents():
                 return 'KEY_UP_PRESSED'
             if ev.key == pygame.K_s: # UP
                 return 'KEY_DOWN_PRESSED'
+            if ev.key == pygame.K_p: # UP
+                return 'KEY_P_PRESSED'                
             else:
                 return 'UNUSED_KEY ' + str(ev.key) + ' PRESSED'
         if ev.type == pygame.KEYUP:

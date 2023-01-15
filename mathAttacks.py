@@ -217,6 +217,13 @@ while g.gameOver == False:
                 #if g.nrOfBlocks < 10:
                 DropBlock()
             if e.startswith('KEY'):
+                if e == 'KEY_P_PRESSED':
+                    g.pauseSwap()
+                    print(g.paused)
+                    #if not g.paused:
+                    #    actions.timerOn
+                    #else:
+                    #    actions.timerOff
                 if e == 'KEY_SPACE_PRESSED':
                     if (target >= 0 and target < len(rect_list)):
                         target = killer(target)
@@ -319,12 +326,13 @@ while g.gameOver == False:
                 # if rectangle.bottom <= (height - gui.btn_h):
                 # reslist = ghostrect.collidelist(rect_list[0:innerI])
                 reslist = ghostrect.collidelistall(rect_list[0:innerI])
-                if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
-                # if rectangle.collidelistall(rect_list) == []:
-                    rectangle.move_ip(v)
-                else:
-                    if monsterList[innerI].onRow < 0:
-                        monsterList[innerI].updateRow(len(rowsFilled)+1)
+                if not g.paused:
+                    if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
+                    # if rectangle.collidelistall(rect_list) == []:
+                        rectangle.move_ip(v)
+                    else:
+                        if monsterList[innerI].onRow < 0:
+                            monsterList[innerI].updateRow(len(rowsFilled)+1)
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
                     pygame.draw.rect(screen, gui.MIXED, rectangle)
@@ -336,6 +344,7 @@ while g.gameOver == False:
                 centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
                 innerI += 1
+
         EnemyMove()
 
         #print(rect_list[-1].collidelist(rect_list[0:-1]))
@@ -371,8 +380,11 @@ while g.gameOver == False:
         if foundOne == False:
             target = -1
 
-        pygame.display.update()     # next frame
-        clock.tick(60)              # pygame.display.flip()
+        if not g.paused:
+            pygame.display.update()     # next frame
+            clock.tick(60)              # pygame.display.flip()
+        # else:
+        #     actions.timerWait()
 
 print("G A M E   O V E R")
 pygame.quit()
