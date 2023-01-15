@@ -6,9 +6,12 @@ DID ge rätt sorlek till rätt tal
 DID få dem att släppas i x-led där det finns plats
 DID	Klassifiera fiender och skapa en lista av sådanna
 DID 	Separera events
-TODO Update monster vars (distground disttower etc)
+DID Update monster vars (distground disttower etc)
+	Commented out later bcs dont know if i need them
+	Now when i stop blocks with collision detection
 TODO Pausfunktion
-TODO Flytta var tornets höjd ökas
+DEPRC Flytta var tornets höjd ökas
+
 TODO Metoder för att söka/öppna lucka
 DVS	# TODO Falling
 	# TODO Searchforgap

@@ -3,6 +3,7 @@
 #       https://www.geeksforgeeks.org/python-list-slicing/
 
 #       Fold Everything     Ctrl+K , Ctrl+0
+#       Print Without Newline   print(str(num) + " ",end="")
 
 # TODO Flytta var inner_I ökas
 import os
@@ -35,7 +36,6 @@ canvas_y = int(gui.btn_h)
 canvas_w = int(width - canvas_x * 2)
 canvas_h = int(height - canvas_y * 2)
 m.w_unit = canvas_w / 16
-# monstersizes = [3, 4, 6, 7, 10]
 gap = int(5)
 
 num = lnum = rnum = 0   # Variabler för utdata av användarens val
@@ -88,19 +88,17 @@ def DropBlock():
         rowDistr = []
         rowsFilled.append([[rowFilled],[True]]) # Skapa ny rad
         rowFilled = 0   # Töm rowFilled
-        # print(rowsDistr[-1])
         xpos = canvas_x
     else: # Annars
         xpos = canvas_x + rowFilled
-        # print(rowDistr)
     rowDistr += monsterList[-1].width,True
     rowFilled = rowFilled + monsterList[-1].width
 
-    #rect = pygame.Rect(xpos, -100, monsterList[-1].width, gui.btn_h)
-    rect = pygame.Rect(xpos, 0, monsterList[-1].width, gui.btn_h)
+    rect = pygame.Rect(xpos, -100, monsterList[-1].width, gui.btn_h)
+    # rect = pygame.Rect(xpos, 0, monsterList[-1].width, gui.btn_h)
     rect_list.append(rect)
     num_list.append(monsterList[-1].numberis)
-    if len(rowsFilled) > 8:
+    if len(rowsFilled) > 8 :
         g.gameOver = True
 
 DropBlock()
@@ -215,7 +213,6 @@ while g.gameOver == False:
         #   ╚═╝ ╚╝ ╚═╝╝╚╝ ╩ ╚═╝
         e = actions.checkEvents()
         if e != None:
-            # print(e)
             if e == 'DROP_BLOCK':
                 #if g.nrOfBlocks < 10:
                 DropBlock()
@@ -285,25 +282,25 @@ while g.gameOver == False:
 #       (  _ (  _ \/ __)  (  \/  / __)/ __)
 #        )(_) ) _ ( (_-.   )    (\__ ( (_-.
 #       (____(____/\___/  (_/\/\_(___/\___/
-        # Skriver ut debugtexten
-        msgLeft = str(g.nrOfBlocksDroped) +' '+ str(g.nrOfBlocks)
-        msgRight = str(target)
-        gui.updateDebugText(msgLeft,msgRight)
-        gui.updateDebugText2(rowFilled)
-        centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
-        center1 = gui.debug_text2.get_rect(center=(width/2, 85))
-
-        # Skriver ut debugtexter
-        screen.blit(gui.debug_text, centerQuit,)
-        screen.blit(gui.debug_text2, center1,)
-
-        # Skriver ut Nummren på nedersta listen
-        screen.blit(resnum, (width/2, height-50))
-        screen.blit(leftnum, (width*0.4, height-50))
-        screen.blit(rightnum, (width*0.6, height-50))
-
+        def diBoogieng():
+            # Skriver ut debugtexten
+            msgLeft = str(g.nrOfBlocksDroped) +' '+ str(g.nrOfBlocks)
+            msgRight = str(target)
+            gui.updateDebugText(msgLeft,msgRight)
+            gui.updateDebugText2(rowFilled)
+            centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
+            center1 = gui.debug_text2.get_rect(center=(width/2, 85))
+            # Skriver ut debugtexter
+            screen.blit(gui.debug_text, centerQuit,)
+            screen.blit(gui.debug_text2, center1,)
+            # Skriver ut Nummren på nedersta listen
+            screen.blit(resnum, (width/2, height-50))
+            screen.blit(leftnum, (width*0.4, height-50))
+            screen.blit(rightnum, (width*0.6, height-50))
+        diBoogieng()
         # Move and Draw the "Enemies"
         v = [0, 3]
+        gv = [0, 4]
         l = [-1,0]
         r = [1,0]
         
@@ -312,27 +309,17 @@ while g.gameOver == False:
 
         innerI = 0  # Index For Inside Below
 
-        """
-        sizeOfRectList = len(monsterList)
-        def Convert(lst):
-            res_dct = map(lambda i: (lst[i], lst[i+1]), range(len(lst)-1)[::2])
-            return dict(res_dct)innerI
-        if  sizeOfRectList > 0:
-            rect_dict = Convert(monsterList)
-        """
-        # print(rect_dict)
-
         def EnemyMove():
             global innerI
             for rectangle in rect_list:
-                ghostrect = rectangle
-                ghostrect.move(v)
+                ghostrect = rectangle.move(v)
+                #ghostrect.move(v)
                 # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
                 # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsDistr)):
                 # if rectangle.bottom <= (height - gui.btn_h):
+                # reslist = ghostrect.collidelist(rect_list[0:innerI])
                 reslist = ghostrect.collidelistall(rect_list[0:innerI])
-                print(reslist)
-                if rectangle.bottom <= (height - gui.btn_h) and not reslist:
+                if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
                 # if rectangle.collidelistall(rect_list) == []:
                     rectangle.move_ip(v)
                 else:
@@ -363,33 +350,26 @@ while g.gameOver == False:
                 ri = 0
                 for monster in monsterList:
                     monster.setRow(-1)
-                    #print(monster)
                     ri += 1
             rowNr +=1
 
-
-
         # row = 0
-        #gui.debugDistr(screen,ground,rowsDistr)
+        gui.debugDistr(screen,ground,rowsDistr)
          
         gui.debugdraw(screen,ground)
-        
 
         # Ser Om Vi Har En lösning
         inI = 0  # Index For Inside Below
         # TargetSearch
         for num in num_list:
             foundOne = False
-            #print(str(num) + " ",end="")
             if lnum * rnum == num:
                 target = inI
                 foundOne = True
-                # print("Hittat "+str(target),end ="")
                 break
             inI += 1
         if foundOne == False:
             target = -1
-            # print("Inget Hittat")
 
         pygame.display.update()     # next frame
         clock.tick(60)              # pygame.display.flip()
