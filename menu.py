@@ -12,22 +12,17 @@ check pip support json format
 """
 pygame.init() # initializing the constructor
 clock = pygame.time.Clock()
-# res = (520,540) # Fönstrets storlek
 res = (720,640) # Fönstrets storlek
-# screen = pygame.display.set_mode(res) # Öppnar Ett Fönster
 screen = pygame.display.set_mode((res), pygame.DOUBLEBUF, 32)
 bgImg = pygame.image.load('assets\BGTEST.JPG')
 bgImg = pygame.transform.smoothscale(bgImg, (1440, 1280))
 s = pygame.Surface(res, pygame.SRCALPHA, 32)
 s = s.convert_alpha()
-s.set_alpha(128)                # alpha level
+s.set_alpha(180)                # alpha level
 ss = pygame.Surface(res, pygame.SRCALPHA, 32)
 ss = s.convert_alpha()
-#ss.set_alpha(64)                # alpha level
-#ss.set_alpha(255)                # alpha level
-ss.set_alpha(150)                # alpha level
+ss.set_alpha(225)               # alpha level
 choosen = 1
-#bgImg.translate()
 def bg(x,y):
     screen.blit(bgImg, (x-360,y-320))
 
@@ -41,7 +36,6 @@ options = [['Starta','Spelläge','Level','Användare','Instruktioner','Avsluta']
 ['AddSub','Multi','Divi','Eqvation','Avsluta'],['Tester Testson','Ny Användare'],
 ['Noobie','Regular','Master'],
 ['Tester Testson','Ny Användare']]
-#modes = [['AddSub','Multi','Divi','Eqvation','Avsluta'],['Tester Testson','Ny Användare']]
 menu = 0
 
 # Sparar Fönstrets Dimensioner I Två Variabler
@@ -61,31 +55,26 @@ text = smallfont.render('start' , True , blue)
 
 
 texts = []
-attrib_texts = ['första','andra','tredje','fjärde','femte','sjätte']
+attrib_texts = ['','andra','tredje','fjärde','femte','']
 attrib_label_dark = []
 attrib_label_light = []
 
 for each in enumerate(options[menu]):
     texts.append(smallfont.render(each[1] , True , blue))
-    #attrib_texts.append("blablabla")
     attrib_label_dark.append(xsmallfont.render(attrib_texts[each[0]] , True , black))
     attrib_label_light.append(xsmallfont.render(attrib_texts[each[0]] , True , white))
-# percentage = (value - min) / (max - min)
-def mousyToPercent(value,min,max):
-    percentage = (value - min) / (max - min)
-    return percentage * 6
+
 def mousyToEntry(value,min,max,entries):
     percentage = (value - min) / (max - min)
     return int(percentage * entries)
 
 while started == False:
-        # clear display
+    # clear display
     screen.fill((white))
-    s.fill((white))
-    ss.fill((black))
-    #ss.fill((0,0,0))
-    #ss = s.convert_alpha()
-    #ss.set_alpha(64)  
+    s.fill((0,0,0,0))
+    ss.fill((0,0,0,0))
+    s = s.convert_alpha()
+    ss = ss.convert_alpha()
     for ev in pygame.event.get():
         # Check for Sys Events
         if ev.type == pygame.QUIT:
@@ -102,11 +91,10 @@ while started == False:
         a_hw = atts[0]/2 # halva textens bredd
         if each[0]==choosen:
             pygame.draw.rect(ss,white,[xmargin,ymargin+each[0]*h_unit+2,width-xmargin*2,h_unit-2])
-            ss.blit(attrib_label_dark[each[0]],(width/2-a_hw,ymargin+ts[1]+each[0]*h_unit+(fh_unit)))
         else:
             pygame.draw.rect(s,white,[xmargin,ymargin+each[0]*h_unit+2,width-xmargin*2,h_unit-2])
-            ss.blit(attrib_label_light[each[0]],(width/2-a_hw,ymargin+ts[1]+each[0]*h_unit+(fh_unit)))
             
+        ss.blit(attrib_label_dark[each[0]],(width/2-a_hw,ymargin+ts[1]+each[0]*h_unit+(fh_unit)))
         ss.blit(texts[each[0]],(width/2-hw,ymargin+ts[1]+each[0]*h_unit-(fh_unit)))
     screen.blit(s, (0,0))    # (0,0) are the top-left coordinates
     screen.blit(ss, (0,0))    # (0,0) are the top-left coordinates
