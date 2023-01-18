@@ -5,7 +5,6 @@
 #       Fold Everything     Ctrl+K , Ctrl+0
 #       Print Without Newline   print(str(num) + " ",end="")
 
-# TODO Flytta var inner_I ökas
 import os
 import actions
 import gui
@@ -14,10 +13,10 @@ import monsters as m
 import slumpfabrik
 from pygame.locals import *  # QUIT event needs this
 import pygame
+
 run = True
-# init window
-clock = pygame.time.Clock()
 pygame.init()                           # initializing the constructor
+clock = pygame.time.Clock()
 res = (620, 540)                         # Fönstrets storlek
 screen = pygame.display.set_mode(res)   # Öppnar Ett Fönster
 width = screen.get_width()
@@ -39,6 +38,7 @@ m.w_unit = canvas_w / 16
 gap = int(5)
 
 num = lnum = rnum = 0   # Variabler för utdata av användarens val
+#num = lnum = rnum = 1   # Vid Division för Kan inte dela med 0
 enemy_x = gui.btn_w
 lp = rp = False  # Leftpressed and RightPressed
 
@@ -320,19 +320,14 @@ while g.gameOver == False:
             global innerI
             for rectangle in rect_list:
                 ghostrect = rectangle.move(v)
-                #ghostrect.move(v)
-                # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsFilled)):
-                # if rectangle.bottom <= ((height - gui.btn_h) - gui.btn_h * len(rowsDistr)):
-                # if rectangle.bottom <= (height - gui.btn_h):
-                # reslist = ghostrect.collidelist(rect_list[0:innerI])
                 reslist = ghostrect.collidelistall(rect_list[0:innerI])
                 if not g.paused:
                     if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
-                    # if rectangle.collidelistall(rect_list) == []:
+                        monsterList[innerI].setRow(-1)
                         rectangle.move_ip(v)
                     else:
                         if monsterList[innerI].onRow < 0:
-                            monsterList[innerI].updateRow(len(rowsFilled)+1)
+                            monsterList[innerI].setRow(len(rowsFilled)+1)
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
                     pygame.draw.rect(screen, gui.MIXED, rectangle)
@@ -346,10 +341,6 @@ while g.gameOver == False:
                 innerI += 1
 
         EnemyMove()
-
-        #print(rect_list[-1].collidelist(rect_list[0:-1]))
-        #print(mouserect.collidelist(rect_list))
-        #print(mouserect.collidelistall(rect_list))
 
         rowNr = 0
         for row in rowsDistr:
@@ -373,6 +364,7 @@ while g.gameOver == False:
         for num in num_list:
             foundOne = False
             if lnum * rnum == num:
+            #if lnum / rnum == num:
                 target = inI
                 foundOne = True
                 break
@@ -383,8 +375,6 @@ while g.gameOver == False:
         if not g.paused:
             pygame.display.update()     # next frame
             clock.tick(60)              # pygame.display.flip()
-        # else:
-        #     actions.timerWait()
 
 print("G A M E   O V E R")
 pygame.quit()

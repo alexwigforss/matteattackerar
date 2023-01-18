@@ -1,5 +1,6 @@
 import slumpfabrik
-
+#import problemz
+from problemz import Problemz as p
 monstersizes = [3, 4, 6, 7, 10]
 w_unit = 0
 INDEX = 0
@@ -10,7 +11,9 @@ class Monster:
     INDEX = INDEX + 1
     self.dist_ground = dist_ground  # Avstånd till mark
     self.dist_tower = dist_tower    # Avstånd till torn
-    self.numberis = slumpfabrik.getRand()   # Akillesnummret
+    #self.numberis = slumpfabrik.getRand()   # Akillesnummret
+    self.numberis = p.getRandomMulti(p)   # Akillesnummret
+    #self.numberis = slumpfabrik.getRandDiv()   # Akillesnummret
     self.size = getSizeInd(self.numberis)   # Breddens multiplikationskoficient
     self.width = int(w_unit * monstersizes[self.size])  # Blockets bredd i pixel
     self.onRow = -1 #på vilken rad bor den (om minus ingen)
@@ -23,7 +26,7 @@ class Monster:
     return f"Index: {self.index} Dist_G: {self.dist_ground} Dist_T: {self.dist_tower} Nr: {self.numberis} Size: {self.size} Width: {self.width} Row: {self.onRow}."
 
   def setRow(self,row):
-    self.onRow += row
+    self.onRow = row
     return self.onRow
 
   def updateRow(self,row):

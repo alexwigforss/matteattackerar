@@ -1,17 +1,13 @@
 from random import randint
 from fractions import Fraction as frac
 
-class problemz:
-    def __init__(my, name, age):
+class Problemz:
+    def __init__(my):
         my.sublist = []
         my.addlist = []
         my.multilist = []
         my.divilist = []
         my.ekvlist = []
-
-    def myfunc(s):
-        print("Hello my name is " + s.name)
-
 
     def ListOfSubAdd(fr,to):
         # global inList
@@ -23,7 +19,14 @@ class problemz:
                 addList.append(x+y)
         subList = list(dict.fromkeys(subList))
         return subList,addList
-    addlist, sublist = ListOfSubAdd()
+    addlist, sublist = ListOfSubAdd(1,11)
+
+    # reslist = []
+    # for x in range(1,11):
+    #     for y in range(1,11):
+    #         reslist.append(x*y)
+    # shortlist = list(dict.fromkeys(reslist))
+
 
     def ListOfMulti(fr,to):
         multiList = []
@@ -32,7 +35,7 @@ class problemz:
                 multiList.append(x*y)
         multiList = list(dict.fromkeys(multiList))
         return multiList
-    multilist = ListOfMulti()
+    multilist = ListOfMulti(1,10)
 
     def ListofDivi(fr,to):
         diviList = []
@@ -42,20 +45,19 @@ class problemz:
                 diviList.append(z)
         diviList = list(dict.fromkeys(diviList))
         return diviList
-    divilist = ListofDivi()
+    divilist = ListofDivi(1,11)
 
-    # TODO generera en lista över alla fraktioner möjliga med talen x och y
-    # TODO UNDER CONSTRUCTION TODO
-    def ListofEkvation(fr,to):
-        ekvList = []
-        for x in range(fr,to+1):
-            for y in range(fr,to+1):
-                z = frac(float(x/y)).limit_denominator(10)
-                ekvList.append(z)
-        ekvList = list(dict.fromkeys(ekvList))
-        return ekvList
-    ekvlist = ListofDivi()
-    # TODO UNDER CONSTRUCTION TODO
+    # # TODO UNDER CONSTRUCTION TODO
+    # def ListofEkvation(fr,to):
+    #     ekvList = []
+    #     for x in range(fr,to+1):
+    #         for y in range(fr,to+1):
+    #             z = frac(float(x/y)).limit_denominator(10)
+    #             ekvList.append(z)
+    #     ekvList = list(dict.fromkeys(ekvList))
+    #     return ekvList
+    # ekvlist = ListofEkvation(1,11)
+    # # TODO UNDER CONSTRUCTION TODO
 
     # Funktioner som returnerar tal från listorna med "lösningar"
     def getRandomAdd(my):
@@ -66,9 +68,9 @@ class problemz:
         r = my.multilist[randint(0,41)]
         return r
 
-    def getRandomMulti(my,str,end):
-        r = my.multilist[randint(str,end)]
-        return r
+    #def getRandomMulti(my,str,end):
+    #    r = my.multilist[randint(str,end)]
+    #    return r
 
     def getRandomDiv(my):
         r = my.divilist[randint(0,41)]
@@ -82,9 +84,9 @@ class problemz:
         r = my.multilist[randint(0,41)]
         return r
 
-    def getRandomMulti(my,str,end):
-        r = my.multilist[randint(str,end)]
-        return r
+    #def getRandomMulti(my,str,end):
+    #    r = my.multilist[randint(str,end)]
+    #    return r
 
     def getRandomSubAdd(my):
         rsub = my.sublist[randint(0,41)]
