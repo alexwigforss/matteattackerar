@@ -9,13 +9,14 @@ DID 	Separera events
 DID Update monster vars (distground disttower etc)
 	Commented out later bcs dont know if i need them
 	Now when i stop blocks with collision detection
-TODO Pausfunktion
+DID Pausfunktion
 DEPRC Flytta var tornets höjd ökas
+TODO Borde "sätta" row på ett annat sätt, när stilla
+		Typ me funktion som mappar utifrån positionen
+		
+TODO Montera statiska monster
+TODO Animera monster
 
-TODO Metoder för att söka/öppna lucka
-DVS	# TODO Falling
-	# TODO Searchforgap
-	# TODO Spaceing
 TODO Knyt ihop Monster med Division & +/-
 TODO GUI-variant för förstagradsekvation.
 TODO Knyt ihop Monster med förstagradsekvation.
