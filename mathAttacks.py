@@ -377,5 +377,6 @@ while g.gameOver == False:
             clock.tick(60)              # pygame.display.flip()
 
 print("G A M E   O V E R")
+#import menu
 pygame.quit()
 quit()

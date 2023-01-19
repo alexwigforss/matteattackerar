@@ -32,6 +32,7 @@ def checkEvents():
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             pygame.quit()
+            #import menu
             exit()
         #run = False # set local variable
         if ev.type == pygame.USEREVENT:
@@ -65,6 +66,7 @@ def checkEvents():
             mouse = pygame.mouse.get_pos()
             if btn_w <= mouse[0] <= width-btn_w and btn_h >= mouse[1]: #Debug prompt button
                 pygame.quit()
+                #import menu
                 exit()
             if 0 <= mouse[0] <= 0+btn_w: # Left panel
                 return 'BTN_LEFT'
