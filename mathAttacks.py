@@ -17,7 +17,7 @@ import pygame
 run = True
 pygame.init()                           # initializing the constructor
 clock = pygame.time.Clock()
-res = (620, 540)                         # Fönstrets storlek
+res = (720,640) # Fönstrets storlek
 screen = pygame.display.set_mode(res)   # Öppnar Ett Fönster
 width = screen.get_width()
 height = screen.get_height()
@@ -80,7 +80,7 @@ def DropBlock():
     global rowFilled, rowsFilled, rowDistr, rowsDistr
     g.nrOfBlocksDroped += 1
     g.nrOfBlocks += 1
-    monsterList.append(m.Monster(canvas_h,canvas_h))
+    monsterList.append(m.Monster(canvas_h,canvas_h,gui.btn_h))
     # Om monster + översta raden är bredare än canvas
     if rowFilled + monsterList[-1].width > canvas_w:
         rowDistr += canvas_w-rowFilled,False
@@ -205,6 +205,7 @@ def grounded():
 #   |_|   |_|\_____||_||_| |_|  |_______) \___/  \___/ |  __/
 #                                                      |_|
 while g.gameOver == False:
+        
         # print(monsterList[0]) # Uncoment to show the first monster in list
         # gui.mouseHooverChecks(screen)
         mouseHooverChecks()

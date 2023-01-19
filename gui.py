@@ -10,6 +10,7 @@ light = (170,170,170) # light shade of the button
 dark = (100,100,100) # dark shade of the button
 black = (0,0,0)
 alpha_light = (170,170,170,80) # dark shade of the button
+
 GRAY = (155,155,155)
 RED = (170,0,0)
 BLUE = (0,170,0)
@@ -81,11 +82,9 @@ def mouseHooverChecks(screen):
     # Quit Button
     if btn_w <= mouse[0] <= width-btn_w and btn_h >= mouse[1]:
         pygame.draw.rect(screen, light, [0+150, 0, width-300, btn_h])
-        #once = False
     # Launch Button
     elif btn_w <= mouse[0] <= width-btn_w and height-btn_h <= mouse[1]:
         pygame.draw.rect(screen, light, [150, height-btn_h, width-300, height])
-        #once = False
     # Left panel
     elif 0 <= mouse[0] <= 0+btn_w:
         pygame.draw.rect(screen, alpha_light, [0, 0, btn_w, height])
