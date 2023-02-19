@@ -13,7 +13,7 @@ import monsters as m
 import slumpfabrik
 from pygame.locals import *  # QUIT event needs this
 import pygame
-
+ticks_scince_start = 0
 run = True
 pygame.init()                           # initializing the constructor
 clock = pygame.time.Clock()
@@ -367,6 +367,9 @@ while g.gameOver == False:
 
         EnemyMove()
 
+        # Sortering när monster byter plats i index måste hända här efteråt.
+        # ! INTE INNUTI ENEMY MOVE !
+
         rowNr = 0
         for row in rowsDistr:
             if isEveryBoolFalse(row):
@@ -399,6 +402,9 @@ while g.gameOver == False:
 
         if not g.paused:
             pygame.display.update()     # next frame
+            ticks_scince_start += 1
+            print(ticks_scince_start)
+            #clock.tick(1)              # pygame.display.flip()
             clock.tick(60)              # pygame.display.flip()
 
 print("G A M E   O V E R")
