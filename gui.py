@@ -13,6 +13,7 @@ alpha_light = (170,170,170,80) # dark shade of the button
 
 GRAY = (155,155,155)
 RED = (170,0,0)
+YELO = (170,170,0)
 BLUE = (0,170,0)
 MIXED = (150,0,150)
 
@@ -39,7 +40,7 @@ def updateDebugText(left,right):
 
 def updateDebugText2(txt):
     global debug_text2
-    # debug_text = smallfont.render(str(left) + ' quit ' + str(right), True, white)
+    #debug_text = smallfont.render(str(left) + ' quit ' + str(right), True, white)
     debug_text2 = xsmallfont.render(str(txt), True, black)
     return
 

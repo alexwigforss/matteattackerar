@@ -10,6 +10,8 @@ class Monster:
     global INDEX
     self.index = INDEX# declared internal
     INDEX = INDEX + 1
+    self.newborn = True
+    self.out_of_index = False
     self.dist_ground = dist_ground  # Avstånd till mark Mby Obsolete
     self.dist_tower = dist_tower    # Avstånd till torn Mby Obsolete
     #self.numberis = slumpfabrik.getRand()   # Akillesnummret
@@ -21,8 +23,8 @@ class Monster:
     self.onRow = -1 #på vilken rad bor den (om minus ingen)
     # eventuella
     # grounded = False # kanske inte nödvändig
-    monsterBornMsg = "Index: {0} Dist_G: {1} Dist_T: {2} Nr: {3} Size: {4} Width: {5} height: {6} Row: {7}."
-    print(monsterBornMsg.format(self.index, self.dist_ground, self.dist_tower, self.numberis, self.size, self.width,self.height, self.onRow))
+    #monsterBornMsg = "Index: {0} Dist_G: {1} Dist_T: {2} Nr: {3} Size: {4} Width: {5} height: {6} Row: {7}."
+    #print(monsterBornMsg.format(self.index, self.dist_ground, self.dist_tower, self.numberis, self.size, self.width,self.height, self.onRow))
 
   def __str__(self):
     return f"Index: {self.index} Dist_G: {self.dist_ground} Dist_T: {self.dist_tower} Nr: {self.numberis} Size: {self.size} Width: {self.width} Row: {self.onRow}."

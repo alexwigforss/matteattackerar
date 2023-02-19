@@ -30,10 +30,10 @@ center1 = gui.debug_text.get_rect(center=(width/2, 135))
 actions.setBtnSize(140, 60)
 gui.setButtonsSize(int(height / 10))
 nrOfRows = 0
-canvas_x = int(gui.btn_w + 10)
-canvas_y = int(gui.btn_h)
-canvas_w = int(width - canvas_x * 2)
-canvas_h = int(height - canvas_y * 2)
+btn_x = int(gui.btn_w + 10)
+btn_y = int(gui.btn_h)
+canvas_w = int(width - btn_x * 2)
+canvas_h = int(height - btn_y * 2)
 m.w_unit = canvas_w / 16
 gap = int(5)
 
@@ -88,9 +88,9 @@ def DropBlock():
         rowDistr = []
         rowsFilled.append([[rowFilled],[True]]) # Skapa ny rad
         rowFilled = 0   # Töm rowFilled
-        xpos = canvas_x
-    else: # Annars
-        xpos = canvas_x + rowFilled
+        xpos = btn_x
+    else: # Annars om monster ryms på raden
+        xpos = btn_x + rowFilled
     rowDistr += monsterList[-1].width,True
     rowFilled = rowFilled + monsterList[-1].width
 
@@ -220,7 +220,7 @@ while g.gameOver == False:
             if e.startswith('KEY'):
                 if e == 'KEY_P_PRESSED':
                     g.pauseSwap()
-                    print(g.paused)
+                    #print(g.paused)
                     #if not g.paused:
                     #    actions.timerOn
                     #else:
@@ -271,7 +271,7 @@ while g.gameOver == False:
         pygame.draw.rect(screen, gui.dark, [150, 0, width-300, gui.btn_h])
         # summary background
         pygame.draw.rect(screen, gui.dark, [150, height-gui.btn_h, width-300, height])
-        pygame.draw.rect(screen, gui.white, [canvas_x, canvas_y, canvas_w, canvas_h])  # the CANVAS
+        pygame.draw.rect(screen, gui.white, [btn_x, btn_y, canvas_w, canvas_h])  # the CANVAS
 
         # Draw All Buttons of the Side-Panels
         # TODO Move to GUI
@@ -292,8 +292,10 @@ while g.gameOver == False:
 #       (____(____/\___/  (_/\/\_(___/\___/
         def diBoogieng():
             # Skriver ut debugtexten
-            msgLeft = str(g.nrOfBlocksDroped) +' '+ str(g.nrOfBlocks)
-            msgRight = str(target)
+            msgLeft = mouse[0]
+            msgRight = mouse[1]
+            # msgLeft = str(g.nrOfBlocksDroped) +' '+ str(g.nrOfBlocks)
+            # msgRight = str(target)
             gui.updateDebugText(msgLeft,msgRight)
             gui.updateDebugText2(rowFilled)
             centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
@@ -308,7 +310,7 @@ while g.gameOver == False:
         diBoogieng()
         # Move and Draw the "Enemies"
         v = [0, 3]
-        gv = [0, 4]
+        gv = [0, 2]
         l = [-1,0]
         r = [1,0]
         
@@ -317,26 +319,48 @@ while g.gameOver == False:
 
         innerI = 0  # Index For Inside Below
 
+        def isOnRow(btm):
+            global canvas_h
+            inv_btm = abs(btm - canvas_h-10-gui.btn_h)
+            row = int(inv_btm / gui.btn_h)
+            return row+1
+
         def EnemyMove():
             global innerI
             for rectangle in rect_list:
-                ghostrect = rectangle.move(v)
+                ghostrect = rectangle.move(gv)
                 reslist = ghostrect.collidelistall(rect_list[0:innerI])
                 if not g.paused:
                     if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
+                        if not monsterList[innerI].newborn:
+                            monsterList[innerI].out_of_index = True
                         monsterList[innerI].setRow(-1)
                         rectangle.move_ip(v)
                     else:
+                        if monsterList[innerI].newborn:
+                            monsterList[innerI].newborn = False
                         if monsterList[innerI].onRow < 0:
-                            monsterList[innerI].setRow(len(rowsFilled)+1)
+                            # Ist för rowsFilled bygg findrow
+                            monsterList[innerI].setRow(isOnRow(rectangle.bottom))
+                            #monsterList[innerI].setRow(len(rowsFilled)+1)
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
-                    pygame.draw.rect(screen, gui.MIXED, rectangle)
+                    if monsterList[innerI].newborn:
+                        pygame.draw.rect(screen, gui.MIXED, rectangle)
+                    else:
+                        pygame.draw.rect(screen, gui.MIXED, rectangle)
                 else:
                     # Draw Regular here
-                    pygame.draw.rect(screen, gui.RED, rectangle,width=5)
-                #movetext = gui.smallfont.render(str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow), True, (0, 0, 0))
-                movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
+                    if monsterList[innerI].newborn:
+                        pygame.draw.rect(screen, gui.RED, rectangle,width=5)
+                    elif monsterList[innerI].out_of_index:
+                        pygame.draw.rect(screen, gui.YELO, rectangle,width=5)
+                    else:
+                        pygame.draw.rect(screen, gui.RED, rectangle,width=1)
+                #mtext = str(num_list[innerI]) + ' ' + str(isOnRow(rectangle.bottom)) + ' ' + str(innerI)
+                mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI)
+                movetext = gui.smallfont.render(mtext, True, (0, 0, 0))
+                #movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
                 centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
                 innerI += 1
@@ -350,13 +374,13 @@ while g.gameOver == False:
                 rowsFilled.pop(rowNr)
                 ri = 0
                 for monster in monsterList:
-                    monster.setRow(-1)
+                    # monster.setRow(-1)
                     ri += 1
             rowNr +=1
 
         # row = 0
         gui.debugDistr(screen,ground,rowsDistr)
-         
+        # print(gui.btn_h) 
         gui.debugdraw(screen,ground)
 
         # Ser Om Vi Har En lösning
