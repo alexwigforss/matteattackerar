@@ -340,9 +340,7 @@ while g.gameOver == False:
                         if monsterList[innerI].newborn:
                             monsterList[innerI].newborn = False
                         if monsterList[innerI].onRow < 0:
-                            # Ist för rowsFilled bygg findrow
                             monsterList[innerI].setRow(isOnRow(rectangle.bottom))
-                            #monsterList[innerI].setRow(len(rowsFilled)+1)
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
                     if monsterList[innerI].newborn:
@@ -367,8 +365,36 @@ while g.gameOver == False:
 
         EnemyMove()
 
-        # Sortering när monster byter plats i index måste hända här efteråt.
-        # ! INTE INNUTI ENEMY MOVE !
+        # TODO Sortering när monster byter plats i index måste hända här efteråt.
+        # ! INTE INNE TI ENEMY MOVE !
+        # BUG Måste nog se till att dem bara kollar när dem ligger stilla
+        # Kanske behöver en ny bool faling för detta som checkas
+        # tillsamans med out_of_index
+        # alltså om out_of_index and not falling då ska den kolla
+        # f.n hinner den få utslag av blocket under som inte försvunnit än.
+        def checkLeft(monster):
+            for m in enumerate(rect_list):
+                if monsterList[m[0]].out_of_index:
+                    ghostrect = rect_list[m[0]].move(l)
+                    a=ghostrect.collidelist(rect_list[0:m[0]])
+                    if a > 0:
+                        print(monster.index,a)
+
+            #print((str)(monster.index), end=" ")
+        def checkRowLeft(args):
+            pass
+        def checkRight(args):
+            pass
+        def checkRowRight(args):
+            pass
+
+        def checkNewNeighbors():
+            for monster in monsterList:
+                if monster.out_of_index:
+                    checkLeft(monster)
+            
+
+        checkNewNeighbors()
 
         rowNr = 0
         for row in rowsDistr:
@@ -403,7 +429,7 @@ while g.gameOver == False:
         if not g.paused:
             pygame.display.update()     # next frame
             ticks_scince_start += 1
-            print(ticks_scince_start)
+            #print(ticks_scince_start)
             #clock.tick(1)              # pygame.display.flip()
             clock.tick(60)              # pygame.display.flip()
 
