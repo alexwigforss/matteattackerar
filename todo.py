@@ -40,6 +40,12 @@ https://pythonbasics.org/static-method/
 
 Gui StartSkärm - In prog
 
+did		En template av knappar med bakgrund
+did		När man trycker på knapparna ska man komma in i undemenyer av listorna med val
+TODO	Implementera att valen sparas i en lista så vi kan ha som startvärden att "bygga" spelet
+TODO	Mekanism som sparar i fil lista av användare TEX anna,multidiv,level,maxscore yadayada
+TODO	Starta Menu från main returnera sedan valda parametrar och hämta rätt data från fabriker savefiles etc
+
 Ett minimalt användarsystem på lokal nivå först.
 	Typ skapa ett namn bara och håller vilka levels det namnet är på.
 
