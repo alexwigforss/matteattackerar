@@ -5,12 +5,12 @@
 #       Fold Everything     Ctrl+K , Ctrl+0
 #       Print Without Newline   print(str(num) + " ",end="")
 
-import os
+# import os
 import actions
 import gui
 import gamevars as g
 import monsters as m
-import slumpfabrik
+# import slumpfabrik
 from pygame.locals import *  # QUIT event needs this
 import pygame
 ticks_scince_start = 0
@@ -25,6 +25,7 @@ gui.setWithHeight(width,height)
 actions.setWinSize(width, height)
 centerQuit = gui.debug_text.get_rect(center=(width/2, 35))
 center1 = gui.debug_text.get_rect(center=(width/2, 135))
+listOfKilled = []
 
 # used for drawing the canvas and calcualate rows
 actions.setBtnSize(140, 60)
@@ -131,8 +132,10 @@ def cyclicDec(var, limit=10):
     return var
 
 def killer(t):
-    global rect_list, num_list, rowsFilled, monsterList
+    global rect_list, num_list, rowsFilled, monsterList , listOfKilled
     g.nrOfBlocks -= 1
+    listOfKilled.append(monsterList[t].index)
+    print(listOfKilled)
     rect_list.pop(t)
     num_list.pop(t)
     monsterList.pop(t)
@@ -273,7 +276,7 @@ while g.gameOver == False:
         pygame.draw.rect(screen, gui.dark, [150, height-gui.btn_h, width-300, height])
         pygame.draw.rect(screen, gui.white, [btn_x, btn_y, canvas_w, canvas_h])  # the CANVAS
 
-        # Draw All Buttons of the Side-Panels
+        # Draw Buttons on the Side-Panels
         # TODO Move to GUI
         for y in range(10):
             yy = y * gui.btn_h + 2
@@ -311,8 +314,6 @@ while g.gameOver == False:
         # Move and Draw the "Enemies"
         v = [0, 3]
         gv = [0, 2]
-        l = [-1,0]
-        r = [1,0]
         
         # mouserect = pygame.Rect([mouse[0],mouse[1], 100, 100])
         # pygame.draw.rect(screen, gui.BLUE, mouserect)  # the CANVAS
@@ -333,14 +334,15 @@ while g.gameOver == False:
                 if not g.paused:
                     if rectangle.bottom <= (height - gui.btn_h-1) and not reslist:
                         if not monsterList[innerI].newborn:
-                            monsterList[innerI].out_of_index = True
+                            monsterList[innerI].out_of_index = monsterList[innerI].falling = True
                         monsterList[innerI].setRow(-1)
                         rectangle.move_ip(v)
                     else:
                         if monsterList[innerI].newborn:
-                            monsterList[innerI].newborn = False
+                            monsterList[innerI].newborn = monsterList[innerI].falling = False
                         if monsterList[innerI].onRow < 0:
                             monsterList[innerI].setRow(isOnRow(rectangle.bottom))
+                            monsterList[innerI].falling = False
                 if innerI == target:    # !!! Inner i must increse one per block. !!!
                     # Draw Worried Here
                     if monsterList[innerI].newborn:
@@ -356,26 +358,27 @@ while g.gameOver == False:
                     else:
                         pygame.draw.rect(screen, gui.RED, rectangle,width=1)
                 #mtext = str(num_list[innerI]) + ' ' + str(isOnRow(rectangle.bottom)) + ' ' + str(innerI)
-                mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI)
-                movetext = gui.smallfont.render(mtext, True, (0, 0, 0))
+                mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI) + ' ' + str(monsterList[innerI].index)
+                if monsterList[innerI].falling:
+                  mtext += 'F'
+                movetext = gui.xsmallfont.render(mtext, True, (0, 0, 0))
                 #movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
                 centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
                 innerI += 1
 
         EnemyMove()
-
+        """
         # TODO Sortering när monster byter plats i index måste hända här efteråt.
-        # ! INTE INNE TI ENEMY MOVE !
+        # ! INTE INNE I ENEMY MOVE !
         # BUG Måste nog se till att dem bara kollar när dem ligger stilla
-        # Kanske behöver en ny bool faling för detta som checkas
-        # tillsamans med out_of_index
-        # alltså om out_of_index and not falling då ska den kolla
-        # f.n hinner den få utslag av blocket under som inte försvunnit än.
+        # TODO Kolla med collidepoint ist
+        # TODO Array av enheter
         def checkLeft(monster):
             for m in enumerate(rect_list):
                 if monsterList[m[0]].out_of_index:
                     ghostrect = rect_list[m[0]].move(l)
+                    
                     a=ghostrect.collidelist(rect_list[0:m[0]])
                     if a > 0:
                         print(monster.index,a)
@@ -387,11 +390,15 @@ while g.gameOver == False:
             pass
         def checkRowRight(args):
             pass
+        """
+        # TODO Kanske rent av skiter i det här intrikata och gör en sökare som
+        # följer ett gridd och indexerar om hela balunsen en unit i taget
 
         def checkNewNeighbors():
             for monster in monsterList:
-                if monster.out_of_index:
-                    checkLeft(monster)
+                if monster.out_of_index and not monster.falling:
+                    #checkLeft(monster)
+                    pass
             
 
         checkNewNeighbors()

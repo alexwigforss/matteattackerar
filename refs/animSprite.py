@@ -9,7 +9,6 @@ for item in range(5):
     print(item)
 
 dark = (100,50,100) # dark shade of the button
-# print(sprite)
 width = screen.get_width()
 height = screen.get_height()
 loop = 1

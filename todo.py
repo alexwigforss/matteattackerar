@@ -11,16 +11,21 @@ DID Update monster vars (distground disttower etc)
 	Now when i stop blocks with collision detection
 DID Pausfunktion
 DEPRC Flytta var tornets höjd ökas
-TODO Borde "sätta" row på ett annat sätt, när stilla
+DID Borde "sätta" row på ett annat sätt, när stilla
 		Typ me funktion som mappar utifrån positionen
-		
+TODO 2D Array av bools som är lika stort som antalet "slots" alltså hur många gånger multiplikatorn
+		ryms på bredden * monsterhöjd
+TODO Bygg en scanner som kan kolla av varje enhet i arrayet
 TODO Montera statiska monster
-TODO Animera monster
+TODO Animera monster <-- gjort referens i refs/animSprite
 
 TODO Knyt ihop Monster med Division & +/-
 TODO GUI-variant för förstagradsekvation.
+TODO def ListofEkvation.
 TODO Knyt ihop Monster med förstagradsekvation.
-TODO cirkeldiagram ist fär att skriva ut fraktionerna med siffror
+TODO Funktion som skriver ut bråk på höjden i pratbubblorna
+DEPRC cirkeldiagram ist fär att skriva ut fraktionerna med siffror
+		(Gjort exempel i p5js kanske branchar av den iden till eget minispel.)
 TODO Implementera problemz ist för slumpfabrik
 TODO Test test test
 

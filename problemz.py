@@ -21,13 +21,6 @@ class Problemz:
         return subList,addList
     addlist, sublist = ListOfSubAdd(1,11)
 
-    # reslist = []
-    # for x in range(1,11):
-    #     for y in range(1,11):
-    #         reslist.append(x*y)
-    # shortlist = list(dict.fromkeys(reslist))
-
-
     def ListOfMulti(fr,to):
         multiList = []
         for x in range(fr,to+1):
@@ -68,10 +61,6 @@ class Problemz:
         r = my.multilist[randint(0,41)]
         return r
 
-    #def getRandomMulti(my,str,end):
-    #    r = my.multilist[randint(str,end)]
-    #    return r
-
     def getRandomDiv(my):
         r = my.divilist[randint(0,41)]
         return r
@@ -84,16 +73,16 @@ class Problemz:
         r = my.multilist[randint(0,41)]
         return r
 
-    #def getRandomMulti(my,str,end):
-    #    r = my.multilist[randint(str,end)]
-    #    return r
+    def getRandomMultiBetwen(my,str,end):
+        r = my.multilist[randint(str,end)]
+        return r
 
     def getRandomSubAdd(my):
         rsub = my.sublist[randint(0,41)]
         radd = my.addlist[randint(0,41)]
         return rsub, radd
 
-    def getRandomSubAdd(my,str,end):
+    def getRandomSubAddBetwen(my,str,end):
         rsub = my.subbs[randint(str,end)]
         radd = my.subbs[randint(str,end)]
         return rsub, radd
@@ -102,14 +91,6 @@ class Problemz:
         ekv = my.ekvlist[randint(0,41)]
         return ekv
 
-    def getRandomEkv(my,str,end):
+    def getRandomEkvBetwen(my,str,end):
         ekv = my.ekvlist[randint(str,end)]
         return ekv
-
-
-# while run:
-#     r = randint(0,41)
-#     print(shortlist[r],end="")
-#     i = input()
-#     if i == "exit":
-#         run=False
