@@ -4,6 +4,9 @@
 
 #       Fold Everything     Ctrl+K , Ctrl+0
 #       Print Without Newline   print(str(num) + " ",end="")
+#
+# [ ] TODO
+# BUG # FIXME # TODO # HACK
 
 # import os
 import actions
