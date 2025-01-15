@@ -1,5 +1,5 @@
-import pygame as pg
 import os
+import pygame as pg
 
 clock = pg.time.Clock()
 screen = pg.display.set_mode((400, 400))
@@ -12,7 +12,9 @@ for item in range(5):
     elif os.name == 'nt':
         sprites.append(pg.image.load("sprites\\" + str(item) + ".png"))
 
+black = (255, 255, 255)
 dark = (100, 50, 100)
+
 width = screen.get_width()
 height = screen.get_height()
 
@@ -23,7 +25,7 @@ c = 1
 
 sprite_x = 0
 sprite_y = 0
-speed = 5
+speed = 1
 sprite_height = sprites[0].get_height()
 
 while loop:
@@ -49,6 +51,6 @@ while loop:
                 c = 1
 
     pg.display.flip()
-    clock.tick(60)
+    clock.tick(120)
 
 pg.quit()
