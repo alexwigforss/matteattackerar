@@ -1,5 +1,3 @@
-- [ ] Do something
-- [x] Something I've done
-
-1. [ ] Do this first
-2. [ ] Followed by this
+1. [ ] Place sprite in game
+2. [ ] Make it anim
+3. [ ] Make it reusable
