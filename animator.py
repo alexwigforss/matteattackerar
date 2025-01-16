@@ -1,4 +1,4 @@
-# [x] BUG Rescaling all sprites on 
+# [x] BUG Rescaling all sprites on drop
 # [ ] TODO test multiple instances
 # [ ] TODO get dimensions by monsters or main
 
