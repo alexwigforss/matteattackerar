@@ -7,12 +7,15 @@
 #
 # [ ] TODO
 # BUG # FIXME # TODO # HACK
+# [ ] FIXME Make anims align with monsters(rects) when block pop 
 
 # import os
 import actions
 import gui
 import gamevars as g
 import monsters as m
+import animator as a
+
 # import slumpfabrik
 from pygame.locals import *  # QUIT event needs this
 import pygame
@@ -52,6 +55,10 @@ rightnum = gui.smallfont.render(str(rnum), True, gui.white)
 resnum = gui.smallfont.render(str(num), True, gui.white)
 events = pygame.event.get()
 
+# Setup aninmations
+anims = []
+# anim = a.Animation(100,gui.btn_h)
+
 # Where is the mouse cursor
 def lefty():
     global mouseoverLeft
@@ -66,8 +73,10 @@ def between():
     mouseoverRight = 0
 # global mouse
 mouse = pygame.mouse.get_pos()
+
 def getValue():
     return int(mouse[1]/height*10+1)
+
 rect_list = []
 list_of_rows_size = []
 num_list = []
@@ -85,6 +94,8 @@ def DropBlock():
     g.nrOfBlocksDroped += 1
     g.nrOfBlocks += 1
     monsterList.append(m.Monster(canvas_h,canvas_h,gui.btn_h))
+    anims.append(a.Animation(monsterList[-1].width,gui.btn_h))
+
     # Om monster + översta raden är bredare än canvas
     if rowFilled + monsterList[-1].width > canvas_w:
         rowDistr += canvas_w-rowFilled,False
@@ -356,10 +367,14 @@ while g.gameOver == False:
                     # Draw Regular here
                     if monsterList[innerI].newborn:
                         pygame.draw.rect(screen, gui.RED, rectangle,width=5)
+                        # anim.blitNextFrame(screen,rectangle.x, rectangle.y)
+                        anims[innerI].blitNextFrame(screen,rectangle.x, rectangle.y)
                     elif monsterList[innerI].out_of_index:
                         pygame.draw.rect(screen, gui.YELO, rectangle,width=5)
-                    else:
+                    else: # When hit ground
                         pygame.draw.rect(screen, gui.RED, rectangle,width=1)
+                        anims[innerI].blitStatic(screen,rectangle.x, rectangle.y)
+
                 #mtext = str(num_list[innerI]) + ' ' + str(isOnRow(rectangle.bottom)) + ' ' + str(innerI)
                 mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI) + ' ' + str(monsterList[innerI].index)
                 if monsterList[innerI].falling:
@@ -440,7 +455,8 @@ while g.gameOver == False:
             pygame.display.update()     # next frame
             ticks_scince_start += 1
             #print(ticks_scince_start)
-            #clock.tick(1)              # pygame.display.flip()
+            #clock.tick(1)              # 
+            pygame.display.flip()
             clock.tick(60)              # pygame.display.flip()
 
 print("G A M E   O V E R")

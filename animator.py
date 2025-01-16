@@ -1,3 +1,4 @@
+# [x] BUG Rescaling all sprites on 
 # [ ] TODO test multiple instances
 # [ ] TODO get dimensions by monsters or main
 
@@ -8,23 +9,22 @@ import monsters as m
 
 class Animation:
     framecount = 0
-    sprites = []
     dir = 1
-    def __init__(self):
+    def __init__(self,width,height):
+        self.sprites = []
         self.dir = 1
         self.framecount = 0
+        self.width = width
+        self.height = height
+
         for item in range(5):
             if os.name == 'posix':
                 self.sprites.append(pg.image.load("sprites/" + str(item) + ".png"))
             elif os.name == 'nt':
                 self.sprites.append(pg.image.load("sprites\\" + str(item) + ".png"))
-        
-        sprite_height = self.sprites[0].get_height()
-        sprite_width = self.sprites[0].get_width()
 
         for item in range(5):
-            self.sprites[item] = pygame.transform.scale(self.sprites[item], (sprite_width / 2, sprite_height / 2))
-
+            self.sprites[item] = pygame.transform.scale(self.sprites[item], (self.width, self.height))
 
     def blitNextFrame(self,screen,x,y):
         screen.blit(self.sprites[self.framecount], (x, y))
@@ -35,12 +35,17 @@ class Animation:
         elif self.framecount == 0:
             self.dir = 1
 
+    def blitStatic(self,screen,x,y):
+        screen.blit(self.sprites[2], (x, y))
+
 if __name__ == "__main__":
     clock = pg.time.Clock()
     screen = pg.display.set_mode((400, 400))
     pg.time.set_timer(pg.USEREVENT, 250)
     
-    anim = Animation()
+    anims = []
+    anims.append(Animation(100,50))
+    # anim = Animation(100,50)
     black = (255, 255, 255)
     dark = (100, 50, 100)
     
@@ -60,11 +65,16 @@ if __name__ == "__main__":
                 pg.draw.rect(screen, dark, [0, 0, width, height])
 
                 sprite_y += speed
+                if sprite_y == 10:
+                    anims.append(Animation(100,50))
 
                 if sprite_y > height:
                     sprite_y = 0
 
-                anim.blitNextFrame(screen,150, sprite_y)
+                i = 0
+                for item in anims:
+                    item.blitNextFrame(screen,i, sprite_y)
+                    i += 100
         
         pg.display.flip()
         clock.tick(120)
