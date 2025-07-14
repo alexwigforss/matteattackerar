@@ -2,8 +2,6 @@
 enkelt litet spel för att träna huvudräkning
 endast multiplikation färdisgställd.
 
-# dmn oc that name in english was token :(
-so lets call it . . .
 # Math Is Falling
 
 a simple lil game for practicing counting by head
