@@ -16,6 +16,9 @@ var startButton;
 var limit;
 var result;
 var rqoute;
+var b_width;
+var b_left;
+var b_right;
 // https://github.com/processing/p5.js/wiki/Positioning-your-canvas
 function setup() {
   limit = 200
@@ -23,7 +26,13 @@ function setup() {
   timerValue = 2;
   textAlign(CENTER,CENTER);
   createCanvas(600, 550);
+
   margin = 100;
+  
+  b_width = windowWidth;
+  b_left = (b_width / 2) - 300;
+  b_right = (b_width / 2) + 300 - margin;
+  
   two_margin = margin * 2;
   boxWidth = width - 2 * margin;
   boxHeight = height;
@@ -31,20 +40,20 @@ function setup() {
   msg = l_left + " / " + rqoute + " / " + l_right
   for (let nm = 1; nm < 11; nm++) {
     button = createButton('l ' + nm.toString(),'L' + nm);
-    button.position(0, height / 10 * (nm-1));
+    button.position(b_left, height / 10 * (nm-1));
     button.mousePressed(() => {
       sideBarPressed(-nm)
     });
   }
   for (let nm = 1; nm < 11; nm++) {
     button = createButton('r ' + nm.toString(),'R' + nm);
-    button.position(width-margin, height / 10 * (nm-1));
+    button.position(b_right, height / 10 * (nm-1));
     button.mousePressed(() => {
       sideBarPressed(nm)
     });
   }
   button = createButton('LAUNCH',0);
-  button.position(0, height);
+  button.position(b_left, height);
   button.id('launch');
   button.mousePressed(() => {
     launchPressed(0)
@@ -113,10 +122,10 @@ function timeIt() {
   }
 }
 function legend(){
-  fill(0);
-  ellipse(width/4, height/10, 100, 100,1);
+  // fill(0);
+  // ellipse(width/2, height/6, 100, 100,1);
   fill(255);
-  arc(width/4, height/10, 100, 100, HALF_PI, HALF_PI + QUARTER_PI * rqoute, PIE);
+  arc(width/2, height/6, 100, 100, HALF_PI, HALF_PI + QUARTER_PI * rqoute, PIE);
 
 }
 function draw() {
@@ -171,6 +180,7 @@ class Ball {
     this.diameter = din;
     this.id = idin;
     this.others = oin;
+    this.colliding = false;
   }
   collide() {
     for (let i = this.id + 1; i < numBalls; i++) {
@@ -178,6 +188,9 @@ class Ball {
       let dy = this.others[i].y - this.y;
       let distance = sqrt(dx * dx + dy * dy);
       let minDist = this.others[i].diameter / 2 + this.diameter / 2;
+      if (distance < (minDist * 2)) {
+        this.colliding = true;
+      }
       if (distance < minDist) {
         let angle = atan2(dy, dx);
         let targetX = this.x + cos(angle) * minDist;
@@ -188,6 +201,8 @@ class Ball {
         this.vy -= ay;
         this.others[i].vx += ax;
         this.others[i].vy += ay;
+      } else {
+          this.colliding = false;
       }
     }
   }
@@ -212,16 +227,19 @@ class Ball {
   }
   display() {
     //text(this.quote, this.x, this.y);
+    
     if (this.quote == rqoute) {
       fill(0,255,0,100);
     } else {
       fill(0,0,255,100);
     }
-    ellipse(this.x, this.y, this.diameter, this.diameter,1);
+    if(this.colliding) {
+      ellipse(this.x, this.y, this.diameter, this.diameter,1);
+    }
     arc(this.x, this.y, this.diameter, this.diameter, HALF_PI, HALF_PI + QUARTER_PI * this.quote, PIE);
     fill(0);
-    textSize(16);
-    text(this.quote, this.x, this.y);
+    textSize(10);
+    text(this.colliding, this.x, this.y);
     //text(this.answer, this.x, this.y);
   }
 }
