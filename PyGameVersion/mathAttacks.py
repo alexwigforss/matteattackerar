@@ -56,7 +56,7 @@ resnum = gui.smallfont.render(str(num), True, gui.white)
 events = pygame.event.get()
 
 # Setup aninmations
-anims = []
+# anims = []
 # anim = a.Animation(100,gui.btn_h)
 
 # Where is the mouse cursor
@@ -94,7 +94,7 @@ def DropBlock():
     g.nrOfBlocksDroped += 1
     g.nrOfBlocks += 1
     monsterList.append(m.Monster(canvas_h,canvas_h,gui.btn_h))
-    anims.append(a.Animation(monsterList[-1].width,gui.btn_h))
+    # anims.append(a.Animation(monsterList[-1].width,gui.btn_h))
 
     # Om monster + översta raden är bredare än canvas
     if rowFilled + monsterList[-1].width > canvas_w:
@@ -153,6 +153,7 @@ def killer(t):
     rect_list.pop(t)
     num_list.pop(t)
     monsterList.pop(t)
+    # anims.pop(t)
     search = 0
     for e in rowsDistr:
         for x in range(1, len(e)-1, 2):
@@ -232,8 +233,9 @@ while g.gameOver == False:
         e = actions.checkEvents()
         if e != None:
             if e == 'DROP_BLOCK':
-                #if g.nrOfBlocks < 10:
+                print(ticks_scince_start, end=' ')
                 DropBlock()
+                pass
             if e.startswith('KEY'):
                 if e == 'KEY_P_PRESSED':
                     g.pauseSwap()
@@ -274,7 +276,7 @@ while g.gameOver == False:
             if e.startswith('BTN'):
                 if e == 'BTN_LEFT':
                     lnum = getValue()
-                    leftnum = gui.smallfont.render(str(lnum), True, gui.white)
+                    leftnum = gui.render(str(lnum), True, gui.white)
                     resnum = gui.smallfont.render(str(lnum * rnum), True, gui.white)
                 if e == 'BTN_RIGHT':
                     rnum = getValue()
@@ -325,6 +327,7 @@ while g.gameOver == False:
             screen.blit(leftnum, (width*0.4, height-50))
             screen.blit(rightnum, (width*0.6, height-50))
         diBoogieng()
+        
         # Move and Draw the "Enemies"
         v = [0, 3]
         gv = [0, 2]
@@ -368,18 +371,18 @@ while g.gameOver == False:
                     if monsterList[innerI].newborn:
                         pygame.draw.rect(screen, gui.RED, rectangle,width=5)
                         # anim.blitNextFrame(screen,rectangle.x, rectangle.y)
-                        anims[innerI].blitNextFrame(screen,rectangle.x, rectangle.y)
                     elif monsterList[innerI].out_of_index:
                         pygame.draw.rect(screen, gui.YELO, rectangle,width=5)
                     else: # When hit ground
                         pygame.draw.rect(screen, gui.RED, rectangle,width=1)
-                        anims[innerI].blitStatic(screen,rectangle.x, rectangle.y)
+                    # anims[innerI].blitNextFrame(screen,rectangle.x, rectangle.y)
 
+                mtext = str(num_list[innerI])
                 #mtext = str(num_list[innerI]) + ' ' + str(isOnRow(rectangle.bottom)) + ' ' + str(innerI)
-                mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI) + ' ' + str(monsterList[innerI].index)
-                if monsterList[innerI].falling:
-                  mtext += 'F'
-                movetext = gui.xsmallfont.render(mtext, True, (0, 0, 0))
+                #mtext = str(num_list[innerI]) + ' ' + str(monsterList[innerI].onRow) + ' ' + str(innerI) + ' ' + str(monsterList[innerI].index)
+                #if monsterList[innerI].falling:
+                #  mtext += 'F'
+                movetext = gui.largefont.render(mtext, True, (0, 0, 0))
                 #movetext = gui.smallfont.render(str(num_list[innerI]), True, (0, 0, 0))
                 centerText = movetext.get_rect(center=(rectangle.centerx, rectangle.centery))
                 screen.blit(movetext, centerText)
@@ -410,7 +413,7 @@ while g.gameOver == False:
             pass
         """
         # TODO Kanske rent av skiter i det här intrikata och gör en sökare som
-        # följer ett gridd och indexerar om hela balunsen en unit i taget
+        # följer ett gridd och indexerar om hela balunsen en enhet i taget
 
         def checkNewNeighbors():
             for monster in monsterList:
@@ -457,7 +460,7 @@ while g.gameOver == False:
             #print(ticks_scince_start)
             #clock.tick(1)              # 
             pygame.display.flip()
-            clock.tick(60)              # pygame.display.flip()
+            clock.tick(20)              # pygame.display.flip()
 
 print("G A M E   O V E R")
 #import menu

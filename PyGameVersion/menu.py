@@ -15,7 +15,7 @@ pygame.init() # initializing the constructor
 clock = pygame.time.Clock()
 res = (720,640) # Fönstrets storlek
 screen = pygame.display.set_mode((res), pygame.DOUBLEBUF, 32)
-bgImg = pygame.image.load('assets\BGTEST.JPG')
+bgImg = pygame.image.load('assets/BGTEST.JPG')
 bgImg = pygame.transform.smoothscale(bgImg, (1440, 1280))
 s = pygame.Surface(res, pygame.SRCALPHA, 32)
 s = s.convert_alpha()

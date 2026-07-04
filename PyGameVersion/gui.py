@@ -17,6 +17,7 @@ YELO = (170,170,0)
 BLUE = (0,170,0)
 MIXED = (150,0,150)
 
+largefont = pygame.font.SysFont('Corbel', 80)
 smallfont = pygame.font.SysFont('Corbel', 35)
 xsmallfont = pygame.font.SysFont('Corbel', 16)
 debug_text = smallfont.render('quit', True, white)
